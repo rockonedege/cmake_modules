@@ -15,7 +15,6 @@ find_program(cppcheck_executable NAMES "cppcheck")
 set(${PROJECT_NAME}_use_cppcheck OFF
     CACHE
         BOOL "cppcheck will be used"
-    FORCE
 )
 
 if(NOT cppcheck_executable)

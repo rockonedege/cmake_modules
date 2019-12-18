@@ -18,13 +18,11 @@ include(CheckCXXCompilerFlag)
 set(${PROJECT_NAME}_cache_cxx_compiler_flags OFF
     CACHE
         BOOL "Cache C++ compiler flags to speed up cmake reconfiguration"
-    FORCE
 )
 
 set(${PROJECT_NAME}_cache_c_compiler_flags OFF
     CACHE
         BOOL "Cache C compiler flags to speed up cmake reconfiguration"
-    FORCE
 )
 
 #[[

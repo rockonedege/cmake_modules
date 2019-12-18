@@ -15,7 +15,6 @@ find_program(clang_tidy_executable NAMES "clang-tidy")
 set(${PROJECT_NAME}_use_clang_tidy OFF
     CACHE
         BOOL "clang-tidy will be used"
-    FORCE
 )
 
 if(NOT clang_tidy_executable)

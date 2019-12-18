@@ -15,7 +15,6 @@ find_package(Git QUIET)
 set(${PROJECT_NAME}_get_git_status OFF
     CACHE
         BOOL "Get current git status"
-    FORCE
 )
 
 if(NOT Git_FOUND)

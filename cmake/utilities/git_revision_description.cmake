@@ -42,7 +42,7 @@ The content of the given variable will be completely overridden.
 
 #]]
 function(get_git_revision_description output_var)
-    if(GET_GIT_STATUS)
+    if(${PROJECT_NAME}_get_git_status)
         # get the commit id
         execute_process(
             COMMAND

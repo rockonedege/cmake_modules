@@ -38,7 +38,7 @@ Helper function to set the 'C_CLANG_TIDY' and 'CXX_CLANG_TIDY' property of the g
 register_for_clang_tidy(<target>)
 
 #]]
-function(register_for_clang_tidy target_name)
+function(register_for_clang_tidy target)
     if(${PROJECT_NAME}_use_clang_tidy)
 
         list(APPEND clang_tidy_command
@@ -47,7 +47,7 @@ function(register_for_clang_tidy target_name)
             "-p=${CMAKE_CURRENT_BINARY_DIR}"
         )
 
-        set_target_properties(${target_name}
+        set_target_properties(${target}
             PROPERTIES
                 C_CLANG_TIDY "${clang_tidy_command}"
                 CXX_CLANG_TIDY "${clang_tidy_command}"

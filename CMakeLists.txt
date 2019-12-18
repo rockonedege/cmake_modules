@@ -55,10 +55,13 @@ include(utilities/available_linker_check)
 include(analyzer/clang_tidy)
 include(analyzer/cppcheck)
 
-# configure more meta information
+# includes cmake files for meta information generation
 # -------------------------------------
 include(utilities/git_revision_description)
 get_git_revision_description(current_git_revision)
+
+include(utilities/project_meta_information)
+generate_meta_information_header("${PROJECT_NAME}" "${current_git_revision}")
 
 # include package helper cmake files
 # -------------------------------------

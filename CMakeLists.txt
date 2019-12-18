@@ -26,13 +26,11 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(${PROJECT_NAME}_enable_documentation OFF
     CACHE
         BOOL "Create and install the HTML based documentation"
-    FORCE
 )
 
 set(${PROJECT_NAME}_enable_tests OFF
     CACHE
         BOOL "Enable/Add tests which can be run with 'ctest' or via 'test' target"
-    FORCE
 )
 
 # append custom cmake paths to module search

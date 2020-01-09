@@ -185,14 +185,12 @@ install(
         DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )
 
-# check cache variable and if the current source dir is the project source dir
-# -------------------------------------
-if(${PROJECT_NAME}_enable_tests AND (PROJECT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR))
+# check if cache variable is true
+if(${PROJECT_NAME}_enable_tests)
     add_subdirectory(test)
 endif()
 
-# check cache variable and if the current source dir is the project source dir
-# -------------------------------------
-if(${PROJECT_NAME}_enable_documentation AND (PROJECT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR))
+# check if cache variable is true
+if(${PROJECT_NAME}_enable_documentation)
     add_subdirectory(doc)
 endif()

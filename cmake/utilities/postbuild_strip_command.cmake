@@ -14,6 +14,13 @@ add_postbuild_strip(<target>)
 #]]
 function(add_postbuild_strip target)
     if(UNIX)
+        get_target_property(${target}_type ${target} TYPE)
+
+        # static libraries should not be stripped
+        if(${target}_type MATCHES "STATIC_LIBRARY")
+            return()
+        endif()
+
         if(CMAKE_BUILD_TYPE MATCHES "Release" OR CMAKE_BUILD_TYPE MATCHES "MinSizeRel")
             add_custom_command(
                 TARGET

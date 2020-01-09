@@ -5,9 +5,6 @@
 
 include_guard(GLOBAL)
 
-# define global option
-set(${PROJECT_NAME}_with_qt "ON" CACHE INTERNAL "Qt5 will be used")
-
 # find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
@@ -45,6 +42,9 @@ NOTE: Uncomment specific modules if required by target
 
 #]]
 function(link_qt5_to_target target)
+    # define internal cache variable
+    set(${PROJECT_NAME}_with_qt "ON" CACHE INTERNAL "Qt5 will be used")
+
     target_link_libraries(${target} Qt5::Core)
     # target_link_libraries(${target} Qt5::Gui)
     # target_link_libraries(${target} Qt5::Widgets)

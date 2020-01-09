@@ -97,49 +97,9 @@ function(project_initialization)
 
     # define compiler/linker flags
     # -------------------------------------
-    # list of compiler flags which should be used
-    list(APPEND compiler_flags_to_test
-        -pedantic
-        -pedantic-errors
-        -Werror
-        -Wextra
-        -Wall
-        -Wdouble-promotion
-        -Wundef
-        -Wshadow
-        -Wnull-dereference
-        -Wzero-as-null-pointer-constant
-        -Wno-gnu-zero-variadic-macro-arguments
-        -Wunused
-        -Wold-style-cast
-        -Wsign-compare
-        -Wunreachable-code
-        -Wunreachable-code-break
-        -Wunreachable-code-return
-        -Wextra-semi-stmt
-        -Wreorder
-        -Wcast-qual
-        -Wconversion
-        -Wfour-char-constants
-        -Wformat=2
-        -Wheader-hygiene
-        -Wnewline-eof
-        -Wnon-virtual-dtor
-        -Wpointer-arith
-        -Wfloat-equal
-        -Wpragmas
-        -Wreserved-user-defined-literal
-        -Wsuper-class-method-mismatch
-        -Wswitch-enum
-        -Wcovered-switch-default
-        -Wthread-safety
-        -Wunused-exception-parameter
-        -Wvector-conversion
-        -Wkeyword-macro
-        -Wformat-pedantic
-        -Woverlength-strings
-        -Wdocumentation
-    )
+    # get list of common compiler flags which should be used
+    include(utilities/common_compiler_flags)
+    get_common_cxx_compiler_flags(compiler_flags_to_test)
 
     # check which flags are supported by the compiler
     check_supported_cxx_compiler_flags("${compiler_flags_to_test}" cxx_compiler_flags)

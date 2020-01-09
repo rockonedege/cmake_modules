@@ -18,9 +18,35 @@ The content of the given variable will be completely overridden.
 #]]
 function(check_available_linker returned_linker_flags)
     if(UNIX)
+        # variables which hold linker specific flags
+        set(lld_linker_flags "-fuse-ld=lld")
+        set(gnu_gold_linker_flags "-fuse-ld=gold")
+
+        # use cached value to avoid multiple 'execute_process()' calls if the function
+        # is used in multiple projects which depend on each other (e.g. add_subdirectory)
+        if(available_linker)
+            if("${available_linker}" MATCHES "LLD")
+                set(${returned_linker_flags} "${lld_linker_flags}" PARENT_SCOPE)
+                return()
+            elseif("${available_linker}" MATCHES "GNU gold")
+                set(${returned_linker_flags} "${gnu_gold_linker_flags}" PARENT_SCOPE)
+                return()
+            endif()
+        endif()
+
+        # check which compiler is available
+        if(CMAKE_CXX_COMPILER)
+            set(compiler ${CMAKE_CXX_COMPILER})
+        elseif(CMAKE_C_COMPILER)
+            set(compiler ${CMAKE_C_COMPILER})
+        else()
+            message(FATAL_ERROR "Required compiler for neither C or C++ was found!")
+        endif()
+
+        # first test for 'LLD' which should be the fastest linker
         execute_process(
             COMMAND
-                ${CMAKE_CXX_COMPILER}
+                ${compiler}
                 -fuse-ld=lld -Wl,--version
             ERROR_QUIET
             OUTPUT_VARIABLE
@@ -29,11 +55,12 @@ function(check_available_linker returned_linker_flags)
 
         if("${linker_version}" MATCHES "LLD")
             message(STATUS "Found linker: LLD")
-            set(${returned_linker_flags} "-fuse-ld=lld" PARENT_SCOPE)
+            set(available_linker "LLD" CACHE INTERNAL "")
+            set(${returned_linker_flags} "${lld_linker_flags}" PARENT_SCOPE)
         else()
             execute_process(
                 COMMAND
-                    ${CMAKE_CXX_COMPILER}
+                    ${compiler}
                     -fuse-ld=gold -Wl,--version
                 ERROR_QUIET
                 OUTPUT_VARIABLE
@@ -42,7 +69,8 @@ function(check_available_linker returned_linker_flags)
 
             if("${linker_version}" MATCHES "GNU gold")
                 message(STATUS "Found linker: GNU gold")
-                set(${returned_linker_flags} "-fuse-ld=gold" PARENT_SCOPE)
+                set(available_linker "GNU gold" CACHE INTERNAL "")
+                set(${returned_linker_flags} "${gnu_gold_linker_flags}" PARENT_SCOPE)
             endif()
         endif()
     else()

@@ -11,7 +11,7 @@
 This repository is a template for C++ projects with CMake as build system.
 
 > The project follows the CMake guidelines provided at
-> https://man.sr.ht/%7Esblumentritt/coding_guidelines/.
+> https://man.sr.ht/~sblumentritt/coding_guidelines/.
 
 #### Requirements
 

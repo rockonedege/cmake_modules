@@ -5,25 +5,27 @@
 
 include_guard(GLOBAL)
 
-# include module which will be used inside the helper function
-include(CheckIPOSupported)
-
 #[[
 
 Helper function to configure a target.
 
 configure_target(TARGET <target>
-                 CXX_STANDARD <version>
+                 [C_STANDARD <version>]
+                 [CXX_STANDARD <version>]
                  [COMPILER_FLAGS <flag>...]
                  [SANITIZER_FLAGS <flag>...]
                  [LINKER_FLAGS <flag>...]
                  [DEFINITION_FLAGS <flag>...]
-                 [INCLUDE_DIRS <dir>...]
+                 [PUBLIC_INCLUDE_DIRS <dir>...]
+                 [PRIVATE_INCLUDE_DIRS <dir>...]
                  [BUILD_TYPE_AS_OUTPUT_DIR]
 )
 
 - TARGET
 Target which should be configured.
+
+- C_STANDARD
+C standard which should be used. Will be added to the PUBLIC scope.
 
 - CXX_STANDARD
 C++ standard which should be used. Will be added to the PUBLIC scope.
@@ -41,7 +43,10 @@ List of linker flags. Will be added to the PRIVATE scope.
 - DEFINITION_FLAGS
 List of definition flags. Will be added to the PRIVATE scope.
 
-- INCLUDE_DIRS
+- PUBLIC_INCLUDE_DIRS
+List of include directories. Will be added to the PUBLIC scope.
+
+- PRIVATE_INCLUDE_DIRS
 List of include directories. Will be added to the PRIVATE scope.
 
 - BUILD_TYPE_AS_OUTPUT_DIR
@@ -62,6 +67,7 @@ function(configure_target)
     )
     list(APPEND one_value_args
         TARGET
+        C_STANDARD
         CXX_STANDARD
     )
     list(APPEND multi_value_args
@@ -69,7 +75,8 @@ function(configure_target)
         SANITIZER_FLAGS
         LINKER_FLAGS
         DEFINITION_FLAGS
-        INCLUDE_DIRS
+        PUBLIC_INCLUDE_DIRS
+        PRIVATE_INCLUDE_DIRS
     )
 
     # use cmake helper function to parse passed arguments
@@ -86,10 +93,6 @@ function(configure_target)
         message(FATAL_ERROR "TARGET argument required!")
     endif()
 
-    if(NOT DEFINED tpre_CXX_STANDARD)
-        message(FATAL_ERROR "CXX_STANDARD argument required!")
-    endif()
-
     # set compile flags
     target_compile_options(${tpre_TARGET}
         PRIVATE
@@ -98,8 +101,10 @@ function(configure_target)
 
     # set include directories
     target_include_directories(${tpre_TARGET}
+        PUBLIC
+            ${tpre_PUBLIC_INCLUDE_DIRS}
         PRIVATE
-            ${tpre_INCLUDE_DIRS}
+            ${tpre_PRIVATE_INCLUDE_DIRS}
     )
 
     # set compile definitions
@@ -115,6 +120,7 @@ function(configure_target)
     )
 
     # check if compiler supports an interprocedural optimization
+    include(CheckIPOSupported)
     check_ipo_supported(RESULT ipo_supported OUTPUT ipo_detailed_error)
     if(ipo_supported)
         set_target_properties(${tpre_TARGET}
@@ -132,17 +138,33 @@ function(configure_target)
             $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:${tpre_SANITIZER_FLAGS}>
     )
 
-    # set c++ standard for the target
-    target_compile_features(${tpre_TARGET}
-        PUBLIC
-            cxx_std_${tpre_CXX_STANDARD}
-    )
+    if(DEFINED tpre_C_STANDARD)
+        # set C standard for the target
+        target_compile_features(${tpre_TARGET}
+            PUBLIC
+                c_std_${tpre_C_STANDARD}
+        )
 
-    # disable c++ compiler extensions e.g. GNU
-    set_target_properties(${tpre_TARGET}
-        PROPERTIES
-            CXX_EXTENSIONS OFF
-    )
+        # disable C compiler extensions e.g. GNU
+        set_target_properties(${tpre_TARGET}
+            PROPERTIES
+                C_EXTENSIONS OFF
+        )
+    endif()
+
+    if(DEFINED tpre_CXX_STANDARD)
+        # set C++ standard for the target
+        target_compile_features(${tpre_TARGET}
+            PUBLIC
+                cxx_std_${tpre_CXX_STANDARD}
+        )
+
+        # disable C++ compiler extensions e.g. GNU
+        set_target_properties(${tpre_TARGET}
+            PROPERTIES
+                CXX_EXTENSIONS OFF
+        )
+    endif()
 
     if(tpre_BUILD_TYPE_AS_OUTPUT_DIR)
         # use output dir depending on build type

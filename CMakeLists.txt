@@ -83,18 +83,6 @@ function(project_initialization)
     include(utilities/project_meta_information)
     generate_meta_information_header("${PROJECT_NAME}" "${current_git_revision}")
 
-    # include package helper cmake files
-    # -------------------------------------
-    # include(package_helper/qt)
-    # include(package_helper/xcb)
-    # include(package_helper/x11)
-    # include(package_helper/curl)
-    # include(package_helper/sdl2)
-    # include(package_helper/threads)
-    # include(package_helper/ncurses)
-    # include(package_helper/freetype)
-    # include(package_helper/fontconfig)
-
     # define compiler/linker flags
     # -------------------------------------
     # get list of common compiler flags which should be used

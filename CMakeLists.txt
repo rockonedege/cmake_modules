@@ -1,12 +1,7 @@
 cmake_minimum_required(VERSION 3.16.0 FATAL_ERROR)
 
-message(DEBUG "[${PROJECT_NAME}] CMake version: ${CMAKE_VERSION}")
-
-# stop if system is not unix/linux
-# -------------------------------------
-if(NOT UNIX)
-    message(FATAL_ERROR "[${PROJECT_NAME}] Only UNIX systems are supported!")
-endif()
+# generate a compile_commands.json
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # define top-level project
 project("cxxtp"
@@ -18,179 +13,215 @@ project("cxxtp"
         CXX C
 )
 
-# generate a compile_commands.json
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+function(main)
+    # global variables
+    # -------------------------------------
+    set(${PROJECT_NAME}_target_sample "sample")
 
-# define cache variables
-# -------------------------------------
-set(${PROJECT_NAME}_enable_documentation OFF
-    CACHE
-        BOOL "Create and install the HTML based documentation"
-)
+    # append custom cmake paths to module search
+    # -------------------------------------
+    list(APPEND CMAKE_MODULE_PATH
+        "${CMAKE_CURRENT_LIST_DIR}/cmake"
+    )
 
-set(${PROJECT_NAME}_enable_tests OFF
-    CACHE
-        BOOL "Enable/Add tests which can be run with 'ctest' or via 'test' target"
-)
+    # call function which handles the project related initialization
+    # e.g. creation of targets
+    project_initialization()
 
-# append custom cmake paths to module search
-# -------------------------------------
-list(APPEND CMAKE_MODULE_PATH
-    "${CMAKE_CURRENT_LIST_DIR}/cmake"
-)
+    # unset module path to not pollute third party projects
+    unset(CMAKE_MODULE_PATH)
 
-# include utility cmake files
-# -------------------------------------
-include(utilities/build_type_handler)
-include(utilities/target_configuration)
-include(utilities/postbuild_strip_command)
+    # call function which handles dependencies
+    # e.g. with 'add_subdirectory'
+    dependency_configuration()
+endfunction()
 
-include(utilities/compiler_flag_check)
-include(utilities/available_linker_check)
+function(project_initialization)
+    # stop if system is not unix/linux
+    # -------------------------------------
+    if(NOT UNIX)
+        message(FATAL_ERROR "[${PROJECT_NAME}] Only UNIX systems are supported!")
+    endif()
 
-# include analyzer cmake files
-# -------------------------------------
-include(analyzer/clang_tidy)
-include(analyzer/cppcheck)
+    # define cache variables
+    # -------------------------------------
+    set(${PROJECT_NAME}_enable_documentation OFF
+        CACHE
+            BOOL "Create and install the HTML based documentation"
+    )
 
-# includes cmake files for meta information generation
-# -------------------------------------
-include(utilities/git_revision_description)
-get_git_revision_description(current_git_revision)
+    set(${PROJECT_NAME}_enable_tests OFF
+        CACHE
+            BOOL "Enable/Add tests which can be run with 'ctest' or via 'test' target"
+    )
 
-include(utilities/project_meta_information)
-generate_meta_information_header("${PROJECT_NAME}" "${current_git_revision}")
+    # append custom cmake paths to module search
+    # -------------------------------------
+    list(APPEND CMAKE_MODULE_PATH
+        "${CMAKE_CURRENT_LIST_DIR}/cmake"
+    )
 
-# include package helper cmake files
-# -------------------------------------
-# include(package_helper/qt)
-# include(package_helper/xcb)
-# include(package_helper/x11)
-# include(package_helper/curl)
-# include(package_helper/sdl2)
-# include(package_helper/threads)
-# include(package_helper/ncurses)
-# include(package_helper/freetype)
-# include(package_helper/fontconfig)
+    # include utility cmake files
+    # -------------------------------------
+    include(utilities/build_type_handler)
+    include(utilities/target_configuration)
+    include(utilities/postbuild_strip_command)
 
-# define compiler/linker flags
-# -------------------------------------
-# list of compiler flags which should be used
-list(APPEND compiler_flags_to_test
-    -pedantic
-    -pedantic-errors
-    -Werror
-    -Wextra
-    -Wall
-    -Wdouble-promotion
-    -Wundef
-    -Wshadow
-    -Wnull-dereference
-    -Wzero-as-null-pointer-constant
-    -Wno-gnu-zero-variadic-macro-arguments
-    -Wunused
-    -Wold-style-cast
-    -Wsign-compare
-    -Wunreachable-code
-    -Wunreachable-code-break
-    -Wunreachable-code-return
-    -Wextra-semi-stmt
-    -Wreorder
-    -Wcast-qual
-    -Wconversion
-    -Wfour-char-constants
-    -Wformat=2
-    -Wheader-hygiene
-    -Wnewline-eof
-    -Wnon-virtual-dtor
-    -Wpointer-arith
-    -Wfloat-equal
-    -Wpragmas
-    -Wreserved-user-defined-literal
-    -Wsuper-class-method-mismatch
-    -Wswitch-enum
-    -Wcovered-switch-default
-    -Wthread-safety
-    -Wunused-exception-parameter
-    -Wvector-conversion
-    -Wkeyword-macro
-    -Wformat-pedantic
-    -Woverlength-strings
-    -Wdocumentation
-)
+    include(utilities/compiler_flag_check)
+    include(utilities/available_linker_check)
 
-# check which flags are supported by the compiler
-check_supported_cxx_compiler_flags("${compiler_flags_to_test}" cxx_compiler_flags)
+    # include analyzer cmake files
+    # -------------------------------------
+    include(analyzer/clang_tidy)
+    include(analyzer/cppcheck)
 
-# check if a faster linker is available
-check_available_linker(linker_flags)
+    # includes cmake files for meta information generation
+    # -------------------------------------
+    include(utilities/git_revision_description)
+    get_git_revision_description(current_git_revision)
 
-list(APPEND definition_flags "")
-list(APPEND sanitizer_flags "-fsanitize=undefined,address" "-fno-omit-frame-pointer")
+    include(utilities/project_meta_information)
+    generate_meta_information_header("${PROJECT_NAME}" "${current_git_revision}")
 
-# target: sample
-# -------------------------------------
-set(target_sample "sample")
+    # include package helper cmake files
+    # -------------------------------------
+    # include(package_helper/qt)
+    # include(package_helper/xcb)
+    # include(package_helper/x11)
+    # include(package_helper/curl)
+    # include(package_helper/sdl2)
+    # include(package_helper/threads)
+    # include(package_helper/ncurses)
+    # include(package_helper/freetype)
+    # include(package_helper/fontconfig)
 
-# create executable target
-add_executable(${target_sample})
-add_executable(${target_sample}::${target_sample} ALIAS ${target_sample})
+    # define compiler/linker flags
+    # -------------------------------------
+    # list of compiler flags which should be used
+    list(APPEND compiler_flags_to_test
+        -pedantic
+        -pedantic-errors
+        -Werror
+        -Wextra
+        -Wall
+        -Wdouble-promotion
+        -Wundef
+        -Wshadow
+        -Wnull-dereference
+        -Wzero-as-null-pointer-constant
+        -Wno-gnu-zero-variadic-macro-arguments
+        -Wunused
+        -Wold-style-cast
+        -Wsign-compare
+        -Wunreachable-code
+        -Wunreachable-code-break
+        -Wunreachable-code-return
+        -Wextra-semi-stmt
+        -Wreorder
+        -Wcast-qual
+        -Wconversion
+        -Wfour-char-constants
+        -Wformat=2
+        -Wheader-hygiene
+        -Wnewline-eof
+        -Wnon-virtual-dtor
+        -Wpointer-arith
+        -Wfloat-equal
+        -Wpragmas
+        -Wreserved-user-defined-literal
+        -Wsuper-class-method-mismatch
+        -Wswitch-enum
+        -Wcovered-switch-default
+        -Wthread-safety
+        -Wunused-exception-parameter
+        -Wvector-conversion
+        -Wkeyword-macro
+        -Wformat-pedantic
+        -Woverlength-strings
+        -Wdocumentation
+    )
 
-# 'include' subdirectory which adds sources and related options to the target
-add_subdirectory(src)
+    # check which flags are supported by the compiler
+    check_supported_cxx_compiler_flags("${compiler_flags_to_test}" cxx_compiler_flags)
 
-# use helper function to configure a target
-configure_target(
-    TARGET
-        ${target_sample}
-    CXX_STANDARD
-        17
-    COMPILER_FLAGS
-        "${cxx_compiler_flags}"
-    SANITIZER_FLAGS
-        "${sanitizer_flags}"
-    LINKER_FLAGS
-        "${linker_flags}"
-    DEFINITION_FLAGS
-        "${definition_flags}"
-    PRIVATE_INCLUDE_DIRS
-        ${CMAKE_CURRENT_SOURCE_DIR}/include
-        ${CMAKE_CURRENT_BINARY_DIR}
-    BUILD_TYPE_AS_OUTPUT_DIR
-)
+    # check if a faster linker is available
+    check_available_linker(linker_flags)
 
-# add analyzer to target
-register_for_clang_tidy(${target_sample})
-register_for_cppcheck(
-    TARGET
-        ${target_sample}
-    CXX_STANDARD
-        17
-)
+    list(APPEND definition_flags "")
+    list(APPEND sanitizer_flags "-fsanitize=undefined,address" "-fno-omit-frame-pointer")
 
-# strip binary for specific build types
-add_postbuild_strip(${target_sample})
+    # target: sample
+    # -------------------------------------
+    # create executable target
+    add_executable(${${PROJECT_NAME}_target_sample})
+    add_executable(
+        ${${PROJECT_NAME}_target_sample}::${${PROJECT_NAME}_target_sample}
+        ALIAS
+        ${${PROJECT_NAME}_target_sample}
+    )
 
-# define installation config for target and use GNU standard locations
-# NOTE: PREFIX=/usr/local/ by default
-include(GNUInstallDirs)
-install(
-    TARGETS
-        ${target_sample}
-    RUNTIME
-        DESTINATION ${CMAKE_INSTALL_BINDIR}
-    LIBRARY
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    ARCHIVE
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}
-)
+    # 'include' subdirectory which adds sources and related options to the target
+    add_subdirectory(src)
 
-# check if cache variable is true
-if(${PROJECT_NAME}_enable_tests)
-    add_subdirectory(test)
-endif()
+    # use helper function to configure a target
+    configure_target(
+        TARGET
+            ${${PROJECT_NAME}_target_sample}
+        CXX_STANDARD
+            17
+        COMPILER_FLAGS
+            "${cxx_compiler_flags}"
+        SANITIZER_FLAGS
+            "${sanitizer_flags}"
+        LINKER_FLAGS
+            "${linker_flags}"
+        DEFINITION_FLAGS
+            "${definition_flags}"
+        PRIVATE_INCLUDE_DIRS
+            ${CMAKE_CURRENT_SOURCE_DIR}/include
+            ${CMAKE_CURRENT_BINARY_DIR}
+        BUILD_TYPE_AS_OUTPUT_DIR
+    )
 
-# check if cache variable is true
-if(${PROJECT_NAME}_enable_documentation)
-    add_subdirectory(doc)
-endif()
+    # add analyzer to target
+    register_for_clang_tidy(${${PROJECT_NAME}_target_sample})
+    register_for_cppcheck(
+        TARGET
+            ${${PROJECT_NAME}_target_sample}
+        CXX_STANDARD
+            17
+    )
+
+    # strip binary for specific build types
+    add_postbuild_strip(${${PROJECT_NAME}_target_sample})
+
+    # define installation config for target and use GNU standard locations
+    # NOTE: PREFIX=/usr/local/ by default
+    include(GNUInstallDirs)
+    install(
+        TARGETS
+            ${${PROJECT_NAME}_target_sample}
+        RUNTIME
+            DESTINATION ${CMAKE_INSTALL_BINDIR}
+        LIBRARY
+            DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        ARCHIVE
+            DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    )
+
+    # check if cache variable is true
+    if(${PROJECT_NAME}_enable_tests)
+        add_subdirectory(test)
+    endif()
+
+    # check if cache variable is true
+    if(${PROJECT_NAME}_enable_documentation)
+        add_subdirectory(doc)
+    endif()
+endfunction()
+
+function(dependency_configuration)
+    # project does not have any dependencies
+endfunction()
+
+main()

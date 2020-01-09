@@ -153,7 +153,7 @@ configure_target(
         "${linker_flags}"
     DEFINITION_FLAGS
         "${definition_flags}"
-    INCLUDE_DIRS
+    PRIVATE_INCLUDE_DIRS
         ${CMAKE_CURRENT_SOURCE_DIR}/include
         ${CMAKE_CURRENT_BINARY_DIR}
     BUILD_TYPE_AS_OUTPUT_DIR
@@ -161,7 +161,12 @@ configure_target(
 
 # add analyzer to target
 register_for_clang_tidy(${target_sample})
-register_for_cppcheck(${target_sample})
+register_for_cppcheck(
+    TARGET
+        ${target_sample}
+    CXX_STANDARD
+        17
+)
 
 # strip binary for specific build types
 add_postbuild_strip(${target_sample})

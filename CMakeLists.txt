@@ -26,17 +26,17 @@ function(main)
 
     # call function which handles the project related initialization
     # e.g. creation of targets
-    project_initialization()
+    initialize_project()
 
     # unset module path to not pollute third party projects
     unset(CMAKE_MODULE_PATH)
 
     # call function which handles dependencies
     # e.g. with 'add_subdirectory'
-    dependency_configuration()
+    configure_dependencies()
 endfunction()
 
-function(project_initialization)
+function(initialize_project)
     # stop if system is not unix/linux
     # -------------------------------------
     if(NOT UNIX)
@@ -168,7 +168,7 @@ function(project_initialization)
     endif()
 endfunction()
 
-function(dependency_configuration)
+function(configure_dependencies)
     # project does not have any dependencies
 endfunction()
 

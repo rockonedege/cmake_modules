@@ -4,19 +4,19 @@
 
 namespace meta_info {
 
-static auto constexpr g_project_name = std::string_view{"@meta_project_name@"};
-static auto constexpr g_project_description = std::string_view{"@meta_project_description@"};
-static auto constexpr g_project_homepage_url = std::string_view{"@meta_project_homepage_url@"};
+static auto constexpr project_name = std::string_view{"@meta_project_name@"};
+static auto constexpr project_description = std::string_view{"@meta_project_description@"};
+static auto constexpr project_homepage_url = std::string_view{"@meta_project_homepage_url@"};
 
-static auto constexpr g_version = std::string_view{"@meta_version@"};
-static auto constexpr g_version_revision = std::string_view{"@meta_version_revision@"};
+static auto constexpr version = std::string_view{"@meta_version@"};
+static auto constexpr version_revision = std::string_view{"@meta_version_revision@"};
 
-static auto constexpr g_version_major = std::string_view{"@meta_version_major@"};
-static auto constexpr g_version_minor = std::string_view{"@meta_version_minor@"};
-static auto constexpr g_version_patch = std::string_view{"@meta_version_patch@"};
-static auto constexpr g_version_tweak = std::string_view{"@meta_version_tweak@"};
+static auto constexpr version_major = std::string_view{"@meta_version_major@"};
+static auto constexpr version_minor = std::string_view{"@meta_version_minor@"};
+static auto constexpr version_patch = std::string_view{"@meta_version_patch@"};
+static auto constexpr version_tweak = std::string_view{"@meta_version_tweak@"};
 
-static auto constexpr g_build_type = std::string_view{"@meta_build_type@"};
-static auto constexpr g_compiler = std::string_view{"@meta_compiler@"};
+static auto constexpr build_type = std::string_view{"@meta_build_type@"};
+static auto constexpr compiler = std::string_view{"@meta_compiler@"};
 
 } // namespace meta_info

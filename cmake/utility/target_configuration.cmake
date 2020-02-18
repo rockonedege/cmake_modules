@@ -121,18 +121,6 @@ function(configure_target)
             LINK_WHAT_YOU_USE ON
     )
 
-    # check if compiler supports an interprocedural optimization
-    include(CheckIPOSupported)
-    check_ipo_supported(RESULT ipo_supported OUTPUT ipo_detailed_error)
-    if(ipo_supported)
-        set_target_properties(${tpre_TARGET}
-            PROPERTIES
-                INTERPROCEDURAL_OPTIMIZATION ON
-        )
-    else()
-        message(WARNING "IPO is not supported: ${ipo_detailed_error}")
-    endif()
-
     # set linker options for the target
     target_link_options(${tpre_TARGET}
         PRIVATE

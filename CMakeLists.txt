@@ -55,20 +55,14 @@ function(initialize_project)
             BOOL "Enable/Add tests which can be run with 'ctest' or via 'test' target"
     )
 
-    # append custom cmake paths to module search
-    # -------------------------------------
-    list(APPEND CMAKE_MODULE_PATH
-        "${CMAKE_CURRENT_LIST_DIR}/cmake"
-    )
-
     # include utility cmake files
     # -------------------------------------
-    include(utilities/build_type_handler)
-    include(utilities/target_configuration)
-    include(utilities/postbuild_strip_command)
+    include(utility/build_type_handler)
+    include(utility/target_configuration)
+    include(utility/postbuild_strip_command)
 
-    include(utilities/compiler_flag_check)
-    include(utilities/available_linker_check)
+    include(compiler/compiler_flag_check)
+    include(utility/available_linker_check)
 
     # include analyzer cmake files
     # -------------------------------------
@@ -77,16 +71,16 @@ function(initialize_project)
 
     # includes cmake files for meta information generation
     # -------------------------------------
-    include(utilities/git_revision_description)
+    include(info_provider/git_revision_description)
     get_git_revision_description(current_git_revision)
 
-    include(utilities/project_meta_information)
+    include(info_provider/meta_information_generator)
     generate_meta_information_header("${PROJECT_NAME}" "${current_git_revision}")
 
     # define compiler/linker flags
     # -------------------------------------
     # get list of common compiler flags which should be used
-    include(utilities/common_compiler_flags)
+    include(compiler/common_compiler_flags)
     get_common_cxx_compiler_flags(compiler_flags_to_test)
 
     # check which flags are supported by the compiler

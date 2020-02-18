@@ -51,7 +51,7 @@ function(add_postbuild_strip target)
             )
         endif()
     else()
-        message(WARNING
+        message(VERBOSE
             "System is not 'UNIX'! Function has no effect and should not be called."
         )
     endif()

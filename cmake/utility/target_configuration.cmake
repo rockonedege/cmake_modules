@@ -99,6 +99,7 @@ function(configure_target)
     target_compile_options(${tpre_TARGET}
         PRIVATE
             ${tpre_COMPILER_FLAGS}
+            $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:${tpre_SANITIZER_FLAGS}>
     )
 
     # set include directories

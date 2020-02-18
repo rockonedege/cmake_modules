@@ -101,8 +101,6 @@ CheckOptions:
     value: 'CamelCase'
   - key: readability-identifier-naming.EnumConstantCase
     value: 'lower_case'
-  - key: readability-identifier-naming.EnumConstantPrefix
-    value: 'e_'
 
   # -- variable related
   - key: readability-identifier-naming.VariableCase
@@ -121,20 +119,12 @@ CheckOptions:
   # -- global variable related
   - key: readability-identifier-naming.GlobalConstantCase
     value: 'lower_case'
-  - key: readability-identifier-naming.GlobalConstantPrefix
-    value: 'g_'
   - key: readability-identifier-naming.GlobalConstantPointerCase
     value: 'lower_case'
-  - key: readability-identifier-naming.GlobalConstantPointerPrefix
-    value: 'g_'
   - key: readability-identifier-naming.GlobalPointerCase
     value: 'lower_case'
-  - key: readability-identifier-naming.GlobalPointerPrefix
-    value: 'g_'
   - key: readability-identifier-naming.GlobalVariableCase
     value: 'lower_case'
-  - key: readability-identifier-naming.GlobalVariablePrefix
-    value: 'g_'
 
   # -- const/constexpr related
   - key: readability-identifier-naming.ConstantCase

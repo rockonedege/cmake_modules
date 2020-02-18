@@ -55,19 +55,7 @@ function(initialize_project)
             BOOL "Enable/Add tests which can be run with 'ctest' or via 'test' target"
     )
 
-    # include utility cmake files
-    # -------------------------------------
     include(utility/build_type_handler)
-    include(utility/target_configuration)
-    include(utility/postbuild_strip_command)
-
-    include(compiler/compiler_flag_check)
-    include(utility/available_linker_check)
-
-    # include analyzer cmake files
-    # -------------------------------------
-    include(analyzer/clang_tidy)
-    include(analyzer/cppcheck)
 
     # includes cmake files for meta information generation
     # -------------------------------------
@@ -84,9 +72,11 @@ function(initialize_project)
     get_common_cxx_compiler_flags(compiler_flags_to_test)
 
     # check which flags are supported by the compiler
+    include(compiler/compiler_flag_check)
     check_supported_cxx_compiler_flags("${compiler_flags_to_test}" cxx_compiler_flags)
 
     # check if a faster linker is available
+    include(utility/available_linker_check)
     check_available_linker(linker_flags)
 
     list(APPEND definition_flags "")
@@ -106,6 +96,7 @@ function(initialize_project)
     add_subdirectory(src)
 
     # use helper function to configure a target
+    include(utility/target_configuration)
     configure_target(
         TARGET
             ${${PROJECT_NAME}_target_sample}
@@ -126,7 +117,10 @@ function(initialize_project)
     )
 
     # add analyzer to target
+    include(analyzer/clang_tidy)
     register_for_clang_tidy(${${PROJECT_NAME}_target_sample})
+
+    include(analyzer/cppcheck)
     register_for_cppcheck(
         TARGET
             ${${PROJECT_NAME}_target_sample}
@@ -135,6 +129,7 @@ function(initialize_project)
     )
 
     # strip binary for specific build types
+    include(utility/postbuild_strip_command)
     add_postbuild_strip(${${PROJECT_NAME}_target_sample})
 
     # define installation config for target and use GNU standard locations

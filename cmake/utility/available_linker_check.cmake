@@ -43,15 +43,20 @@ function(check_available_linker returned_linker_flags)
             message(FATAL_ERROR "Required compiler for neither C or C++ was found!")
         endif()
 
-        # first test for 'LLD' which should be the fastest linker
-        execute_process(
-            COMMAND
-                ${compiler}
-                -fuse-ld=lld -Wl,--version
-            ERROR_QUIET
-            OUTPUT_VARIABLE
-                linker_version
-        )
+        # only check for 'LLD' for Clang compiler as GCC does not seem to be supported
+        if((CMAKE_C_COMPILER_ID MATCHES Clang) OR (CMAKE_CXX_COMPILER_ID MATCHES Clang))
+            # first test for 'LLD' which should be the fastest linker
+            execute_process(
+                COMMAND
+                    ${compiler}
+                    -fuse-ld=lld -Wl,--version
+                ERROR_QUIET
+                OUTPUT_VARIABLE
+                    linker_version
+            )
+        else()
+            set(linker_version "")
+        endif()
 
         if("${linker_version}" MATCHES "LLD")
             message(STATUS "Found linker: LLD")

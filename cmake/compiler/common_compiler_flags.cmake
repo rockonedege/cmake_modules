@@ -27,16 +27,7 @@ function(get_common_cxx_compiler_flags output_var)
             BOOL "Treat compiler warnings as errors"
     )
 
-    if(DEFINED ENV{TEAMCITY_VERSION})
-        # on teamcity we require that the warnings should be treated as errors
-        set(${PROJECT_NAME}_compiler_warnings_as_errors ON
-            CACHE
-                BOOL "Treat compiler warnings as errors"
-            FORCE
-        )
-    endif()
-
-    if((CMAKE_CXX_COMPILER_ID MATCHES GNU) OR (CMAKE_CXX_COMPILER_ID MATCHES Clang))
+    if(("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU") OR ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang"))
         # list of compiler flags which should be used
         list(APPEND compiler_flags
             -pedantic
@@ -48,7 +39,6 @@ function(get_common_cxx_compiler_flags output_var)
             -Wshadow
             -Wnull-dereference
             -Wzero-as-null-pointer-constant
-            -Wno-gnu-zero-variadic-macro-arguments
             -Wunused
             -Wold-style-cast
             -Wsign-compare
@@ -80,12 +70,28 @@ function(get_common_cxx_compiler_flags output_var)
             -Wdocumentation
         )
 
+        if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+            # needed because of a bad behavior of 'GCC' from the manual:
+            # -------------------------------------------------------------
+            # When an unrecognized warning option is requested (-Wunknown-warning),
+            # GCC emits a diagnostic stating that the option is not recognized. However, if the
+            # -Wno- form is used, the behavior is slightly different: no diagnostic is produced
+            # for -Wno-unknown-warning unless other diagnostics are being produced.
+            # -------------------------------------------------------------
+            # As CMake's `check_cxx_compiler_flag` checks each flag in isolation 'GCC'
+            # things the flag could be used but on the real build all flags are used
+            # and 'GCC' would throw an error.
+            list(APPEND compiler_flags
+                -Wno-gnu-zero-variadic-macro-arguments
+            )
+        endif()
+
         if(${PROJECT_NAME}_compiler_warnings_as_errors)
             list(APPEND compiler_flags
                 -Werror
             )
         endif()
-    elseif(CMAKE_CXX_COMPILER_ID MATCHES MSVC)
+    elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
         list(APPEND compiler_flags
             /permissive-
             /W4
@@ -97,7 +103,7 @@ function(get_common_cxx_compiler_flags output_var)
 
         if(${PROJECT_NAME}_compiler_warnings_as_errors)
             list(APPEND compiler_flags
-                /Wx
+                /WX
             )
         endif()
     endif()
@@ -127,16 +133,7 @@ function(get_common_c_compiler_flags output_var)
             BOOL "Treat compiler warnings as errors"
     )
 
-    if(DEFINED ENV{TEAMCITY_VERSION})
-        # on teamcity we require that the warnings should be treated as errors
-        set(${PROJECT_NAME}_compiler_warnings_as_errors ON
-            CACHE
-                BOOL "Treat compiler warnings as errors"
-            FORCE
-        )
-    endif()
-
-    if((CMAKE_C_COMPILER_ID MATCHES GNU) OR (CMAKE_C_COMPILER_ID MATCHES Clang))
+    if(("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU") OR ("${CMAKE_C_COMPILER_ID}" STREQUAL "Clang"))
         # list of compiler flags which should be used
         list(APPEND compiler_flags
             -pedantic
@@ -147,7 +144,6 @@ function(get_common_c_compiler_flags output_var)
             -Wundef
             -Wshadow
             -Wnull-dereference
-            -Wno-gnu-zero-variadic-macro-arguments
             -Wunused
             -Wsign-compare
             -Wunreachable-code
@@ -172,12 +168,27 @@ function(get_common_c_compiler_flags output_var)
             -Wdocumentation
         )
 
+        if("${CMAKE_C_COMPILER_ID}" STREQUAL "Clang")
+            # needed because of a bad behavior of 'GCC' from the manual:
+            # -------------------------------------------------------------
+            # When an unrecognized warning option is requested (-Wunknown-warning),
+            # GCC emits a diagnostic stating that the option is not recognized. However, if the
+            # -Wno- form is used, the behavior is slightly different: no diagnostic is produced
+            # for -Wno-unknown-warning unless other diagnostics are being produced.
+            # -------------------------------------------------------------
+            # As CMake's `check_cxx_compiler_flag` checks each flag in isolation 'GCC'
+            # things the flag could be used but on the real build all flags are used
+            # and 'GCC' would throw an error.
+            list(APPEND compiler_flags
+                -Wno-gnu-zero-variadic-macro-arguments
+            )
+
         if(${PROJECT_NAME}_compiler_warnings_as_errors)
             list(APPEND compiler_flags
                 -Werror
             )
         endif()
-    elseif(CMAKE_C_COMPILER_ID MATCHES MSVC)
+    elseif("${CMAKE_C_COMPILER_ID}" STREQUAL "MSVC")
         list(APPEND compiler_flags
             /permissive-
             /W4
@@ -186,7 +197,7 @@ function(get_common_c_compiler_flags output_var)
 
         if(${PROJECT_NAME}_compiler_warnings_as_errors)
             list(APPEND compiler_flags
-                /Wx
+                /WX
             )
         endif()
     endif()

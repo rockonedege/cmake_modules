@@ -52,6 +52,8 @@ List of include directories. Will be added to the PRIVATE scope.
 - BUILD_TYPE_AS_OUTPUT_DIR
 Option which changes the build output directory and uses a sub folder with the build type.
 
+NOTE: Only has an effect if the generator is not an IDE.
+
 Example:
 Without the option on a 'Debug' build -> ${CMAKE_CURRENT_BINARY_DIR}/target_binary
 Without the option on a 'Release' build -> ${CMAKE_CURRENT_BINARY_DIR}/target_binary
@@ -166,7 +168,8 @@ function(configure_target)
         )
     endif()
 
-    if(tpre_BUILD_TYPE_AS_OUTPUT_DIR)
+    # BUILD_TYPE_AS_OUTPUT_DIR only has an effect if the generator is not an IDE
+    if(tpre_BUILD_TYPE_AS_OUTPUT_DIR AND (NOT CMAKE_CONFIGURATION_TYPES))
         # use output dir depending on build type
         string(TOLOWER "${CMAKE_BUILD_TYPE}" build_type_lower)
         set_target_properties(${tpre_TARGET}

@@ -50,5 +50,9 @@ function(add_postbuild_strip target)
                     $<TARGET_FILE:${target}>
             )
         endif()
+    else()
+        message(WARNING
+            "System is not 'UNIX'! Function has no effect and should not be called."
+        )
     endif()
 endfunction()

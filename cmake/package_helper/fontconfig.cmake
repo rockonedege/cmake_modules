@@ -13,7 +13,7 @@ find_package(Fontconfig REQUIRED)
 
 # check if not found
 if(NOT Fontconfig_FOUND)
-    message(FATAL_ERROR "[${PROJECT_NAME}] Fontconfig not found!")
+    message(FATAL_ERROR "Fontconfig not found!")
 endif()
 
 #[[

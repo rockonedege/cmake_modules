@@ -17,7 +17,7 @@ find_package(CURL
 
 # check if not found
 if(NOT CURL_FOUND)
-    message(FATAL_ERROR "[${PROJECT_NAME}] CURL not found!")
+    message(FATAL_ERROR "CURL not found!")
 endif()
 
 #[[

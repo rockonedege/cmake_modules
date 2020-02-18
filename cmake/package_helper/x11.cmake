@@ -13,7 +13,7 @@ find_package(X11 REQUIRED)
 
 # check against X11_FOUND which is always required
 if(NOT X11_FOUND)
-    message(FATAL_ERROR "[${project_name}] X11 not found!")
+    message(FATAL_ERROR "X11 not found!")
 endif()
 
 #[[
@@ -54,7 +54,7 @@ function(link_x11_to_target target)
     )
 
     if(NOT X11_Xft_FOUND)
-        message(STATUS "[${PROJECT_NAME}] X11 Xft not found!")
+        message(STATUS "X11 Xft not found!")
         set(${PROJECT_NAME}_use_x11_xft OFF
             CACHE
                 BOOL "X11 Xft will be used"
@@ -63,7 +63,7 @@ function(link_x11_to_target target)
     endif()
 
     if(NOT X11_Xext_FOUND)
-        message(STATUS "[${PROJECT_NAME}] X11 Xext not found!")
+        message(STATUS "X11 Xext not found!")
         set(${PROJECT_NAME}_use_x11_xext OFF
             CACHE
                 BOOL "X11 Xext will be used"
@@ -72,7 +72,7 @@ function(link_x11_to_target target)
     endif()
 
     if(NOT X11_Xrandr_FOUND)
-        message(STATUS "[${PROJECT_NAME}] X11 Xrandr not found!")
+        message(STATUS "X11 Xrandr not found!")
         set(${PROJECT_NAME}_use_x11_xrandr OFF
             CACHE
                 BOOL "X11 Xrandr will be used"
@@ -81,7 +81,7 @@ function(link_x11_to_target target)
     endif()
 
     if(NOT X11_Xinerama_FOUND)
-        message(STATUS "[${PROJECT_NAME}] X11 Xinerama not found!")
+        message(STATUS "X11 Xinerama not found!")
         set(${PROJECT_NAME}_use_x11_xinerama OFF
             CACHE
                 BOOL "X11 Xinerama will be used"

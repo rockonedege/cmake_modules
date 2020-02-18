@@ -40,7 +40,7 @@ function(initialize_project)
     # stop if system is not unix/linux
     # -------------------------------------
     if(NOT UNIX)
-        message(FATAL_ERROR "[${PROJECT_NAME}] Only UNIX systems are supported!")
+        message(FATAL_ERROR "Only UNIX systems are supported!")
     endif()
 
     # define cache variables

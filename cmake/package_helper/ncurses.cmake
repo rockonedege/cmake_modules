@@ -16,7 +16,7 @@ find_package(Curses REQUIRED)
 
 # check if not found
 if(NOT CURSES_FOUND)
-    message(FATAL_ERROR "[${PROJECT_NAME}] ncurses not found!")
+    message(FATAL_ERROR "ncurses not found!")
 endif()
 
 # define additional libraries for ncurses

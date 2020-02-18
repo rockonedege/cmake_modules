@@ -15,7 +15,7 @@ find_package(SDL2 REQUIRED)
 
 # check if not found
 if(NOT SDL2_FOUND)
-    message(FATAL_ERROR "[${PROJECT_NAME}] SDL2 not found!")
+    message(FATAL_ERROR "SDL2 not found!")
 endif()
 
 #[[
@@ -25,7 +25,7 @@ Helper function to link SDL2 to the given target.
 link_sdl2_to_target(<target>)
 
 #]]
-function(link_sdl2_to_target target_name)
-    target_include_directories(${target_name} PRIVATE ${SDL2_INCLUDE_DIRS})
-    target_link_libraries(${target_name} ${SDL2_LIBRARIES})
+function(link_sdl2_to_target target)
+    target_include_directories(${target} PRIVATE ${SDL2_INCLUDE_DIRS})
+    target_link_libraries(${target} ${SDL2_LIBRARIES})
 endfunction()

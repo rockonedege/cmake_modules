@@ -13,7 +13,7 @@ find_package(Threads REQUIRED)
 
 # check if not found
 if(NOT Threads_FOUND)
-    message(FATAL_ERROR "[${PROJECT_NAME}] Threads not found!")
+    message(FATAL_ERROR "Threads not found!")
 endif()
 
 #[[
@@ -23,6 +23,6 @@ Helper function to link Threads to the given target.
 link_threads_to_target(<target>)
 
 #]]
-function(link_threads_to_target target_name)
-    target_link_libraries(${target_name} Threads::Threads)
+function(link_threads_to_target target)
+    target_link_libraries(${target} Threads::Threads)
 endfunction()

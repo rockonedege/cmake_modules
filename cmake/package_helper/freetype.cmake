@@ -13,7 +13,7 @@ find_package(Freetype REQUIRED)
 
 # check if not found
 if(NOT FREETYPE_FOUND)
-    message(FATAL_ERROR "[${PROJECT_NAME}] Freetype not found!")
+    message(FATAL_ERROR "Freetype not found!")
 endif()
 
 #[[

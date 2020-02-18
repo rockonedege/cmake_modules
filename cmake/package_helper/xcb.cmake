@@ -102,7 +102,7 @@ foreach(component ${xcb_components})
     mark_as_advanced(${current_component}_INCLUDE_DIR ${current_component}_LIBRARY)
 
     if(NOT ${component}_FOUND)
-        message(WARNING "[${PROJECT_NAME}] ${component} not found!")
+        message(WARNING "${component} not found!")
     else()
         set(current_imported_target xcb::${current_component})
 
@@ -118,7 +118,7 @@ endforeach()
 
 # check against XCB_FOUND which is always required
 if(NOT XCB_FOUND)
-    message(FATAL_ERROR "[${PROJECT_NAME}] xcb not found!")
+    message(FATAL_ERROR "xcb not found!")
 endif()
 
 #[[

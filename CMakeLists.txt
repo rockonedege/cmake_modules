@@ -56,6 +56,7 @@ function(initialize_project)
     )
 
     include(utility/build_type_handler)
+    handle_default_build_type()
 
     # includes cmake files for meta information generation
     # -------------------------------------

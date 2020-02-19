@@ -80,8 +80,21 @@ function(initialize_project)
     include(utility/available_linker_check)
     check_available_linker(linker_flags)
 
+    # get sanitizer flags
+    include(sanitizer/address)
+    get_address_sanitizer_flags(address_sanitizer_flags)
+
+    include(sanitizer/undefined_behavior)
+    get_undefined_behavior_sanitizer_flags(undefined_behavior_flags)
+
+    # create one variable to hold all wanted sanitizer flags
+    list(APPEND sanitizer_flags
+        ${address_sanitizer_flags}
+        ${undefined_behavior_flags}
+    )
+
+    # define custom definition flags
     list(APPEND definition_flags "")
-    list(APPEND sanitizer_flags "-fsanitize=undefined,address" "-fno-omit-frame-pointer")
 
     # target: sample
     # -------------------------------------

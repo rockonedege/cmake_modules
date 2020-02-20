@@ -14,6 +14,9 @@ project("cxxtp"
 )
 
 function(main)
+    # unset module path to not get polluted from including projects
+    unset(CMAKE_MODULE_PATH)
+
     # global variables
     # -------------------------------------
     set(${PROJECT_NAME}_target_sample "sample")

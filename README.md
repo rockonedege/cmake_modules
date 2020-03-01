@@ -1,36 +1,8 @@
-## cxxtp - C++ template project
+## cmake_modules
 
-#### Table of Contents
-
-- [Description](#description)
-- [Requirements](#requirements)
-- [License](#license)
-
-#### Description
-
-This repository is a template for C++ projects with CMake as build system.
-
-> The project follows the CMake guidelines provided at
-> https://man.sr.ht/~sblumentritt/coding_guidelines/.
-
-#### Requirements
-
-- [CMake][] >= 3.16
-
-**Optional**:
-
-- [Doxygen][] - documentation generator
-- [Cppcheck][] - static analysis tool for C++
-- [clang-tidy][] - clang-based C++ 'linter' tool
-- [clang-format][] - clang-based code formatting tool
+This repository provides a wide range of CMake helper files.
 
 #### License
 
 The project is licensed under the MIT license. See [LICENSE](LICENSE) for more
 information.
-
-[CMake]: https://cmake.org/
-[Doxygen]: http://www.stack.nl/~dimitri/doxygen/index.html
-[Cppcheck]: http://cppcheck.sourceforge.net/
-[clang-tidy]: http://clang.llvm.org/extra/clang-tidy/
-[clang-format]: https://clang.llvm.org/docs/ClangFormat.html

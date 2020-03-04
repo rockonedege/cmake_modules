@@ -44,7 +44,7 @@ function(check_supported_cxx_compiler_flags compiler_flags supported_compiler_fl
             # create variable used for cmake cache entry
             string(TOUPPER ${flag} cache_entry_flag_name)
 
-            if((CMAKE_C_COMPILER_ID MATCHES GNU) OR (CMAKE_C_COMPILER_ID MATCHES Clang))
+            if((CMAKE_CXX_COMPILER_ID MATCHES GNU) OR (CMAKE_CXX_COMPILER_ID MATCHES Clang))
                 string(
                     REGEX REPLACE
                         "^-W|^-" "CXX_FLAG_"
@@ -58,7 +58,7 @@ function(check_supported_cxx_compiler_flags compiler_flags supported_compiler_fl
                     cache_entry_flag_name
                     ${cache_entry_flag_name}
                 )
-            elseif(CMAKE_C_COMPILER_ID MATCHES MSVC)
+            elseif(CMAKE_CXX_COMPILER_ID MATCHES MSVC)
                 string(
                     REGEX REPLACE
                         "^-/|^-" "CXX_FLAG_"

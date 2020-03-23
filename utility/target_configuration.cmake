@@ -15,7 +15,8 @@ configure_target(TARGET <target>
                  [COMPILER_FLAGS <flag>...]
                  [SANITIZER_FLAGS <flag>...]
                  [LINKER_FLAGS <flag>...]
-                 [DEFINITION_FLAGS <flag>...]
+                 [PUBLIC_DEFINITION_FLAGS <flag>...]
+                 [PRIVATE_DEFINITION_FLAGS <flag>...]
                  [PUBLIC_INCLUDE_DIRS <dir>...]
                  [PRIVATE_INCLUDE_DIRS <dir>...]
                  [BUILD_TYPE_AS_OUTPUT_DIR]
@@ -40,7 +41,10 @@ NOTE: Sanitizer flags are only added to 'Debug' and 'RelWithDebInfo' build types
 - LINKER_FLAGS
 List of linker flags. Will be added to the PRIVATE scope.
 
-- DEFINITION_FLAGS
+- PUBLIC_DEFINITION_FLAGS
+List of definition flags. Will be added to the PUBLIC scope.
+
+- PRIVATE_DEFINITION_FLAGS
 List of definition flags. Will be added to the PRIVATE scope.
 
 - PUBLIC_INCLUDE_DIRS
@@ -76,7 +80,8 @@ function(configure_target)
         COMPILER_FLAGS
         SANITIZER_FLAGS
         LINKER_FLAGS
-        DEFINITION_FLAGS
+        PUBLIC_DEFINITION_FLAGS
+        PRIVATE_DEFINITION_FLAGS
         PUBLIC_INCLUDE_DIRS
         PRIVATE_INCLUDE_DIRS
     )
@@ -112,8 +117,10 @@ function(configure_target)
 
     # set compile definitions
     target_compile_definitions(${tpre_TARGET}
+        PUBLIC
+            ${tpre_PUBLIC_DEFINITION_FLAGS}
         PRIVATE
-            ${tpre_DEFINITION_FLAGS}
+            ${tpre_PRIVATE_DEFINITION_FLAGS}
     )
 
     # this enables check for extraneous files when linking

@@ -50,7 +50,7 @@ function(handle_default_build_type)
         endif()
 
         # print current build type
-        message(STATUS "Build Type: ${CMAKE_BUILD_TYPE}")
+        message(VERBOSE "Build Type: ${CMAKE_BUILD_TYPE}")
     else()
         message(VERBOSE "Build type handling does not have an effect for IDE generators!")
     endif()

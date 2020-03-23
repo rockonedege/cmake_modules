@@ -182,6 +182,7 @@ function(get_common_c_compiler_flags output_var)
             list(APPEND compiler_flags
                 -Wno-gnu-zero-variadic-macro-arguments
             )
+        endif()
 
         if(${PROJECT_NAME}_compiler_warnings_as_errors)
             list(APPEND compiler_flags

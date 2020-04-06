@@ -5,9 +5,6 @@
 
 include_guard(GLOBAL)
 
-# internal variable to hold current file dir which is later needed for configure_file()
-set(meta_info_cmake_dir "${CMAKE_CURRENT_LIST_DIR}" CACHE INTERNAL "")
-
 #[[
 
 Generate a C++ header in the build directory which contain project related meta informations.
@@ -39,7 +36,7 @@ function(generate_meta_information_header name_of_project version_revision)
 
     # configure template header file to get meta information in source code
     configure_file(
-        ${meta_info_cmake_dir}/templates/meta_information.hxx.in
+        ${CMAKE_CURRENT_FUNCTION_LIST_DIR}/templates/meta_information.hxx.in
         ${CMAKE_CURRENT_BINARY_DIR}/meta_information.hxx
         @ONLY
     )

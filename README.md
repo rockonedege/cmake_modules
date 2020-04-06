@@ -3,6 +3,7 @@
 #### Table of Contents
 
 - [Description](#description)
+- [Requirements](#requirments)
 - [Usage](#usage)
 - [License](#license)
 
@@ -17,6 +18,10 @@ build system.
 The CMake files were written with modern CMake in mind. Each file is properly
 documented with a starting section listing the provided functions and file-wide
 cache variables and each function also documents its arguments.
+
+#### Requirements
+
+- [CMake][] >= 3.17.0
 
 #### Usage
 
@@ -47,3 +52,5 @@ include(analyzer/clang_tidy) # -> ../cmake_modules/analyzer/clang_tidy.cmake
 
 The project is licensed under the MIT license. See [LICENSE](LICENSE) for more
 information.
+
+[CMake]: https://cmake.org/

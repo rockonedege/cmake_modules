@@ -91,21 +91,8 @@ function(get_common_cxx_compiler_flags output_var)
                 -Werror
             )
         endif()
-    elseif("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
-        list(APPEND compiler_flags
-            /permissive-
-            /W4
-            /w14640
-            /w14265
-            /w14826
-            /w14928
-        )
-
-        if(${PROJECT_NAME}_compiler_warnings_as_errors)
-            list(APPEND compiler_flags
-                /WX
-            )
-        endif()
+    else()
+        message(WARNING "Compiler (${CMAKE_CXX_COMPILER_ID}) not supported!")
     endif()
 
     # safe result in the given output variable
@@ -189,18 +176,8 @@ function(get_common_c_compiler_flags output_var)
                 -Werror
             )
         endif()
-    elseif("${CMAKE_C_COMPILER_ID}" STREQUAL "MSVC")
-        list(APPEND compiler_flags
-            /permissive-
-            /W4
-            /w14826
-        )
-
-        if(${PROJECT_NAME}_compiler_warnings_as_errors)
-            list(APPEND compiler_flags
-                /WX
-            )
-        endif()
+    else()
+        message(WARNING "Compiler (${CMAKE_C_COMPILER_ID}) not supported!")
     endif()
 
     # safe result in the given output variable

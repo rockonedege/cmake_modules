@@ -24,6 +24,12 @@ The following cache variables will be set/provided:
 
 #]]
 function(check_supported_cxx_compiler_flags compiler_flags supported_compiler_flags)
+    if((NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU") AND
+        (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang"))
+        message(WARNING "Compiler (${CMAKE_CXX_COMPILER_ID}) not supported!")
+        return()
+    endif()
+
     # define cache variable
     set(${PROJECT_NAME}_cache_cxx_compiler_flags OFF
         CACHE
@@ -44,28 +50,19 @@ function(check_supported_cxx_compiler_flags compiler_flags supported_compiler_fl
             # create variable used for cmake cache entry
             string(TOUPPER ${flag} cache_entry_flag_name)
 
-            if((CMAKE_CXX_COMPILER_ID MATCHES GNU) OR (CMAKE_CXX_COMPILER_ID MATCHES Clang))
-                string(
-                    REGEX REPLACE
-                        "^-W|^-" "CXX_FLAG_"
-                    cache_entry_flag_name
-                    ${cache_entry_flag_name}
-                )
+            string(
+                REGEX REPLACE
+                    "^-W|^-" "CXX_FLAG_"
+                cache_entry_flag_name
+                ${cache_entry_flag_name}
+            )
 
-                string(
-                    REGEX REPLACE
-                        "[-=]" "_"
-                    cache_entry_flag_name
-                    ${cache_entry_flag_name}
-                )
-            elseif(CMAKE_CXX_COMPILER_ID MATCHES MSVC)
-                string(
-                    REGEX REPLACE
-                        "^-/|^-" "CXX_FLAG_"
-                    cache_entry_flag_name
-                    ${cache_entry_flag_name}
-                )
-            endif()
+            string(
+                REGEX REPLACE
+                    "[-=]" "_"
+                cache_entry_flag_name
+                ${cache_entry_flag_name}
+            )
 
             # call module function which does the actual check
             check_cxx_compiler_flag(${flag} ${cache_entry_flag_name})
@@ -114,6 +111,12 @@ The following cache variables will be set/provided:
 
 #]]
 function(check_supported_c_compiler_flags compiler_flags supported_compiler_flags)
+    if((NOT "${CMAKE_C_COMPILER_ID}" STREQUAL "GNU") AND
+        (NOT "${CMAKE_C_COMPILER_ID}" STREQUAL "Clang"))
+        message(WARNING "Compiler (${CMAKE_C_COMPILER_ID}) not supported!")
+        return()
+    endif()
+
     # define cache variable
     set(${PROJECT_NAME}_cache_c_compiler_flags OFF
         CACHE
@@ -135,28 +138,19 @@ function(check_supported_c_compiler_flags compiler_flags supported_compiler_flag
             # create variable used for cmake cache entry
             string(TOUPPER ${flag} cache_entry_flag_name)
 
-            if((CMAKE_C_COMPILER_ID MATCHES GNU) OR (CMAKE_C_COMPILER_ID MATCHES Clang))
-                string(
-                    REGEX REPLACE
-                        "^-W|^-" "C_FLAG_"
-                    cache_entry_flag_name
-                    ${cache_entry_flag_name}
-                )
+            string(
+                REGEX REPLACE
+                    "^-W|^-" "C_FLAG_"
+                cache_entry_flag_name
+                ${cache_entry_flag_name}
+            )
 
-                string(
-                    REGEX REPLACE
-                        "[-=]" "_"
-                    cache_entry_flag_name
-                    ${cache_entry_flag_name}
-                )
-            elseif(CMAKE_C_COMPILER_ID MATCHES MSVC)
-                string(
-                    REGEX REPLACE
-                        "^-/|^-" "C_FLAG_"
-                    cache_entry_flag_name
-                    ${cache_entry_flag_name}
-                )
-            endif()
+            string(
+                REGEX REPLACE
+                    "[-=]" "_"
+                cache_entry_flag_name
+                ${cache_entry_flag_name}
+            )
 
             # call module function which does the actual check
             check_c_compiler_flag(${flag} ${cache_entry_flag_name})

@@ -44,7 +44,8 @@ function(check_available_linker returned_linker_flags)
         endif()
 
         # only check for 'LLD' for Clang compiler as GCC does not seem to be supported
-        if((CMAKE_C_COMPILER_ID MATCHES Clang) OR (CMAKE_CXX_COMPILER_ID MATCHES Clang))
+        if(("${CMAKE_C_COMPILER_ID}" STREQUAL "Clang") OR
+            ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang"))
             # first test for 'LLD' which should be the fastest linker
             execute_process(
                 COMMAND

@@ -1,15 +1,10 @@
-## cmake_modules
-
-#### Table of Contents
-
-- [Description](#description)
-- [Requirements](#requirments)
-- [Usage](#usage)
-- [License](#license)
-
-#### Description
+# cmake_modules
 
 This repository provides a wide range of CMake helper files.
+
+[[_TOC_]]
+
+## Description
 
 They were initially produced during the course of developing a C++ template
 project which should lower the entry level to start a new project with CMake as
@@ -19,17 +14,17 @@ The CMake files were written with modern CMake in mind. Each file is properly
 documented with a starting section listing the provided functions and file-wide
 cache variables and each function also documents its arguments.
 
-#### Requirements
+## Requirements
 
 - [CMake][] >= 3.17.0
 
-#### Usage
+## Usage
 
 Get a copy of the repository and place it inside or near your project. The
 prefered way of using `cmake_modules` is as Git submodule.
 
 ```sh
-$ git submodule add https://git.sr.ht/~sblumentritt/cmake_modules <path>
+$ git submodule add https://gitlab.com/s.blumentritt/cmake_modules <path>
 ```
 
 To access the CMake files without the full path it is advised to append
@@ -48,7 +43,7 @@ include(compiler/compiler_flag_check) # -> ../cmake_modules/compiler/compiler_fl
 include(analyzer/clang_tidy) # -> ../cmake_modules/analyzer/clang_tidy.cmake
 ```
 
-#### License
+## License
 
 The project is licensed under the MIT license. See [LICENSE](LICENSE) for more
 information.

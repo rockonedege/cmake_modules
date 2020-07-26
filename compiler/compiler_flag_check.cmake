@@ -20,29 +20,25 @@ Stores the resulting supported compiler flags as list in the given variable.
 The content of the given variable will be completely overridden.
 
 The following cache variables will be set/provided:
-    <project-name>_cache_cxx_compiler_flags - True if C++ compiler flags should be cached.
+    <project-name>_force_cxx_compiler_flag_check - Set to ON to invalidate cache and check again.
+                                                   Variable will be always set for OFF after call.
 
 #]]
 function(check_supported_cxx_compiler_flags compiler_flags supported_compiler_flags)
-    if((NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU") AND
-        (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang"))
+    if((NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+        AND (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang"))
         message(WARNING "Compiler (${CMAKE_CXX_COMPILER_ID}) not supported!")
         return()
     endif()
 
     # define cache variable
-    set(${PROJECT_NAME}_cache_cxx_compiler_flags OFF
+    set(${PROJECT_NAME}_force_cxx_compiler_flag_check OFF
         CACHE
-            BOOL "Cache C++ compiler flags to speed up cmake reconfiguration"
+            BOOL "Invalidate cache and check compiler flags again. Always set to OFF after call."
     )
 
-    if(${PROJECT_NAME}_cache_cxx_compiler_flags AND ${PROJECT_NAME}_cached_cxx_compiler_flags)
-        # safe result in the given output variable
-        set(${supported_compiler_flags}
-            ${${PROJECT_NAME}_cached_cxx_compiler_flags}
-            PARENT_SCOPE
-        )
-    else()
+    if(${PROJECT_NAME}_force_cxx_compiler_flag_check
+       OR (NOT ${PROJECT_NAME}_cached_cxx_compiler_flags))
         # get the helper function from cmake
         include(CheckCXXCompilerFlag)
 
@@ -77,20 +73,27 @@ function(check_supported_cxx_compiler_flags compiler_flags supported_compiler_fl
             unset(${cache_entry_flag_name} CACHE)
         endforeach()
 
-        if(${PROJECT_NAME}_cache_cxx_compiler_flags)
-            set(
-                ${PROJECT_NAME}_cached_cxx_compiler_flags
-                    "${internal_supported_flags}"
-                CACHE
-                    INTERNAL ""
-            )
-        elseif(${PROJECT_NAME}_cached_cxx_compiler_flags)
-            unset(${PROJECT_NAME}_cached_cxx_compiler_flags CACHE)
-        endif()
+        # invalidate cached results and update with new results
+        unset(${PROJECT_NAME}_cached_cxx_compiler_flags CACHE)
+        set(
+            ${PROJECT_NAME}_cached_cxx_compiler_flags
+                "${internal_supported_flags}"
+            CACHE
+                INTERNAL ""
+        )
 
-        # safe result in the given output variable
-        set(${supported_compiler_flags} ${internal_supported_flags} PARENT_SCOPE)
+       set(${PROJECT_NAME}_force_cxx_compiler_flag_check OFF
+            CACHE
+                BOOL "Invalidate cache and check compiler flags again. Set to OFF after call."
+            FORCE
+        )
     endif()
+
+    # return cached result of compiler flags check
+    set(${supported_compiler_flags}
+        ${${PROJECT_NAME}_cached_cxx_compiler_flags}
+        PARENT_SCOPE
+    )
 endfunction()
 
 #[[
@@ -107,30 +110,25 @@ Stores the resulting supported compiler flags as list in the given variable.
 The content of the given variable will be completely overridden.
 
 The following cache variables will be set/provided:
-    <project-name>_cache_c_compiler_flags - True if C compiler flags should be cached.
+    <project-name>_force_c_compiler_flag_check - Set to ON to invalidate cache and check again.
+                                                 Variable will be always set for OFF after call.
 
 #]]
 function(check_supported_c_compiler_flags compiler_flags supported_compiler_flags)
-    if((NOT "${CMAKE_C_COMPILER_ID}" STREQUAL "GNU") AND
-        (NOT "${CMAKE_C_COMPILER_ID}" STREQUAL "Clang"))
+    if((NOT "${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
+        AND (NOT "${CMAKE_C_COMPILER_ID}" STREQUAL "Clang"))
         message(WARNING "Compiler (${CMAKE_C_COMPILER_ID}) not supported!")
         return()
     endif()
 
     # define cache variable
-    set(${PROJECT_NAME}_cache_c_compiler_flags OFF
+    set(${PROJECT_NAME}_force_c_compiler_flag_check OFF
         CACHE
-            BOOL "Cache C compiler flags to speed up cmake reconfiguration"
+            BOOL "Invalidate cache and check compiler flags again. Set to OFF after call."
     )
 
-    if(${PROJECT_NAME}_cache_c_compiler_flags AND ${PROJECT_NAME}_cached_c_compiler_flags)
-        # safe result in the given output variable
-        set(
-            ${supported_compiler_flags}
-            ${${PROJECT_NAME}_cached_c_compiler_flags}
-            PARENT_SCOPE
-        )
-    else()
+    if(${PROJECT_NAME}_force_c_compiler_flag_check
+       OR (NOT ${PROJECT_NAME}_cached_c_compiler_flags))
         # get the helper function from cmake
         include(CheckCCompilerFlag)
 
@@ -165,18 +163,25 @@ function(check_supported_c_compiler_flags compiler_flags supported_compiler_flag
             unset(${cache_entry_flag_name} CACHE)
         endforeach()
 
-        if(${PROJECT_NAME}_cache_c_compiler_flags)
-            set(
-                ${PROJECT_NAME}_cached_c_compiler_flags
-                    "${internal_supported_flags}"
-                CACHE
-                    INTERNAL ""
-            )
-        elseif(${PROJECT_NAME}_cached_c_compiler_flags)
-            unset(${PROJECT_NAME}_cached_c_compiler_flags CACHE)
-        endif()
+        # invalidate cached results and update with new results
+        unset(${PROJECT_NAME}_cached_c_compiler_flags CACHE)
+        set(
+            ${PROJECT_NAME}_cached_c_compiler_flags
+                "${internal_supported_flags}"
+            CACHE
+                INTERNAL ""
+        )
 
-        # safe result in the given output variable
-        set(${supported_compiler_flags} ${internal_supported_flags} PARENT_SCOPE)
+       set(${PROJECT_NAME}_force_c_compiler_flag_check OFF
+            CACHE
+                BOOL "Invalidate cache and check compiler flags again. Set to OFF after call."
+            FORCE
+        )
     endif()
+
+    # return cached result of compiler flags check
+    set(${supported_compiler_flags}
+        ${${PROJECT_NAME}_cached_c_compiler_flags}
+        PARENT_SCOPE
+    )
 endfunction()

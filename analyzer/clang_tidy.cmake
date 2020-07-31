@@ -40,6 +40,8 @@ function(register_for_clang_tidy target)
         else()
             message(DEBUG "Found clang-tidy: ${clang_tidy_executable}")
         endif()
+
+        mark_as_advanced(FORCE clang_tidy_executable)
     endif()
 
     # just in case check here again if the clang-tidy executable is defined

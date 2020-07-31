@@ -79,6 +79,8 @@ function(register_for_cppcheck)
         else()
             message(DEBUG "Found cppcheck: ${cppcheck_executable}")
         endif()
+
+        mark_as_advanced(FORCE cppcheck_executable)
     endif()
 
     # just in case check here again if the cppcheck executable is defined

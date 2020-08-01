@@ -14,6 +14,10 @@ handle_default_build_type()
 If no build type is defined a default type will be set. The other build types will be made
 available for the CMake GUI/TUI application.
 
+The following cache variables will be set/provided:
+    <project-name>_force_coverage_flags_for_gcov - Set to ON to use flags to generate GCOV data
+                                                   for all supported compiler.
+
 #]]
 function(handle_default_build_type)
     # only check against CMAKE_BUILD_TYPE if generation is not for an IDE
@@ -66,14 +70,31 @@ Defines global CMake variables for the Coverage build type.
 
 define_coverage_build_type_variables()
 
-TODO:
-- add option to use different flags for Clang compiler
-  (https://clang.llvm.org/docs/SourceBasedCodeCoverage.html)
-- handle compiler which do not support coverage e.g. MSVC
+The following cache variables will be set/provided:
+    <project-name>_force_coverage_flags_for_gcov - Set to ON to use flags to generate GCOV data
+                                                   for all supported compiler.
+
 #]]
 function(define_coverage_build_type_variables)
-    set(compiler_flags "-g -O0 -fprofile-arcs -ftest-coverage")
-    set(linker_flags "--coverage")
+    # define cache variable which can be used to toggle the usage
+    set(${PROJECT_NAME}_force_coverage_flags_for_gcov OFF
+        CACHE
+            BOOL "Force the use of flags to generate GCOV data for all supported compiler"
+    )
+
+    if(${PROJECT_NAME}_force_coverage_for_gcov
+        OR ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+        OR ("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU"))
+        set(compiler_flags "-g -O0 -fprofile-arcs -ftest-coverage")
+        set(linker_flags "--coverage")
+    elseif(("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+        OR ("${CMAKE_C_COMPILER_ID}" STREQUAL "Clang"))
+        # flags for https://clang.llvm.org/docs/SourceBasedCodeCoverage.html
+        set(compiler_flags "-g -O0 -fprofile-instr-generate -fcoverage-mapping")
+        set(linker_flags "-fprofile-instr-generate")
+    else()
+        message(STATUS "Coverage flags not available for the given compiler")
+    endif()
 
     set(CMAKE_C_FLAGS_COVERAGE "${compiler_flags}"
         CACHE

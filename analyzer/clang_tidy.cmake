@@ -47,9 +47,9 @@ function(register_for_clang_tidy target)
     # just in case check here again if the clang-tidy executable is defined
     if(${PROJECT_NAME}_use_clang_tidy AND DEFINED clang_tidy_executable)
         list(APPEND clang_tidy_command
-            "${clang_tidy_executable}"
-            "-header-filter=${CMAKE_CURRENT_SOURCE_DIR}/.*"
-            "-p=${CMAKE_CURRENT_BINARY_DIR}"
+            ${clang_tidy_executable}
+            -header-filter=${CMAKE_CURRENT_SOURCE_DIR}/.*
+            -p=${CMAKE_CURRENT_BINARY_DIR}
         )
 
         set_target_properties(${target}

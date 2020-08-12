@@ -30,7 +30,7 @@ function(get_common_cxx_compiler_flags output_var)
     if(("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU") OR ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang"))
         # list of compiler flags which should be used
         list(APPEND compiler_flags
-            -pedantic # collection of multiple flags
+            -pedantic # warnings demanded by strict ISO C and ISO C++
             -pedantic-errors # turn pedantic warnings into errors
             -Wextra # collection of multiple flags
             -Wall # collection of multiple flags
@@ -68,6 +68,15 @@ function(get_common_cxx_compiler_flags output_var)
             -Wformat-pedantic # format type mismatch
             -Woverlength-strings # string literal exceeds maximum length
             -Wdocumentation # warn on documentation mismatches and related problems
+            -Wimplicit-fallthrough # unannotated fall-through between switch labels
+            -Wchar-subscripts # array subscript is of type 'char'
+            -Wmisleading-indentation # statement is not part of the previous if/else/for/while
+            -Wmissing-braces # suggest braces around initialization of subobject
+            -Wpessimizing-move # moving a temporary object prevents copy elision
+            -Wdeprecated-copy # implicit copy is deprecated because it has a user-declared copy
+            -Wredundant-move # redundant move in return statement
+            -Wtype-limits # comparison is always true or always false due to the limited range
+            -fno-common # compile common globals like normal definitions
         )
 
         if("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
@@ -123,7 +132,7 @@ function(get_common_c_compiler_flags output_var)
     if(("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU") OR ("${CMAKE_C_COMPILER_ID}" STREQUAL "Clang"))
         # list of compiler flags which should be used
         list(APPEND compiler_flags
-            -pedantic # collection of multiple flags
+            -pedantic # warnings demanded by strict ISO C and ISO C++
             -pedantic-errors # turn pedantic warnings into errors
             -Wextra # collection of multiple flags
             -Wall # collection of multiple flags
@@ -153,6 +162,10 @@ function(get_common_c_compiler_flags output_var)
             -Wkeyword-macro # keyword is hidden by macro definition
             -Wformat-pedantic # format type mismatch
             -Wdocumentation # warn on documentation mismatches and related problems
+            -Wimplicit-fallthrough # unannotated fall-through between switch labels
+            -Wmisleading-indentation # statement is not part of the previous if/else/for/while
+            -Wmissing-braces # suggest braces around initialization of subobject
+            -fno-common # compile common globals like normal definitions
         )
 
         if("${CMAKE_C_COMPILER_ID}" STREQUAL "Clang")

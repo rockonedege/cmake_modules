@@ -65,11 +65,16 @@ Without the option on a 'Release' build -> ${CMAKE_CURRENT_BINARY_DIR}/target_bi
 With the option on a 'Debug' build -> ${CMAKE_CURRENT_BINARY_DIR}/debug/target_binary
 With the option on a 'Release' build -> ${CMAKE_CURRENT_BINARY_DIR}/release/target_binary
 
+- ENABLE_UNUSED_SECTION_GARBAGE_COLLECTION
+Option which adds new compiler and linker flags to the target to allow the linker to
+garbage collect unused sections in the binary which will lead to a smaller size.
+
 #]]
 function(configure_target)
     # define arguments for cmake_parse_arguments
     list(APPEND options
         BUILD_TYPE_AS_OUTPUT_DIR
+        ENABLE_UNUSED_SECTION_GARBAGE_COLLECTION
     )
     list(APPEND one_value_args
         TARGET
@@ -161,6 +166,19 @@ function(configure_target)
         set_target_properties(${tpre_TARGET}
             PROPERTIES
                 CXX_EXTENSIONS OFF
+        )
+    endif()
+
+    if(tpre_ENABLE_UNUSED_SECTION_GARBAGE_COLLECTION)
+        target_compile_options(${tpre_TARGET}
+            PRIVATE
+                -ffunction-sections # place each function in its own section
+                -fdata-sections # place each data in its own section
+        )
+        target_link_options(${tpre_TARGET}
+            PRIVATE
+                -Wl,--gc-sections # enable garbage collection of unused sections
+                -Wl,--as-needed # only set DT_NEEDED for shared libraries if used
         )
     endif()
 

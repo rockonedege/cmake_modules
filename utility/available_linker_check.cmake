@@ -15,12 +15,20 @@ check_available_linker(<var>)
 Stores the resulting linker flags in the given variable.
 The content of the given variable will be completely overridden.
 
+NOTE:
+For the 'lld' and 'gold' linker additional flags are added to the result.
+    * -Wl,--no-undefined
+        Report unresolved symbols even if the linker is creating a shared library.
+    * -Wl,--no-allow-shlib-undefined
+        Do not allow unresolved references in shared libraries.
+
 #]]
 function(check_available_linker returned_linker_flags)
     if(UNIX)
+        set(common_linker_flags "-Wl,--no-undefined;-Wl,--no-allow-shlib-undefined")
         # variables which hold linker specific flags
-        set(lld_linker_flags "-fuse-ld=lld")
-        set(gnu_gold_linker_flags "-fuse-ld=gold")
+        set(lld_linker_flags "-fuse-ld=lld;${common_linker_flags}")
+        set(gnu_gold_linker_flags "-fuse-ld=gold;${common_linker_flags}")
 
         # use cached value to avoid multiple 'execute_process()' calls if the function
         # is used in multiple projects which depend on each other (e.g. add_subdirectory)

@@ -178,7 +178,6 @@ function(configure_target)
         target_link_options(${tpre_TARGET}
             PRIVATE
                 -Wl,--gc-sections # enable garbage collection of unused sections
-                -Wl,--as-needed # only set DT_NEEDED for shared libraries if used
         )
     endif()
 

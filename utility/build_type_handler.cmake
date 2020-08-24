@@ -1,64 +1,67 @@
-# Provides function to handle build type if none is given.
+# Provides function to setup build type related variables.
 #
 # The following function will be provided:
-#     handle_default_build_type - set default build type
+#     setup_build_type_variables - sets build type related variables
 
 include_guard(GLOBAL)
 
 #[[
 
-Helper function to handle the default build type if none is given.
+Helper function to setup build type related variables.
 
-handle_default_build_type()
+setup_build_type_variables()
 
 If no build type is defined a default type will be set. The other build types will be made
 available for the CMake GUI/TUI application.
+
+Default build type: Debug
+Valid build types: Debug, Release, MinSizeRel, RelWithDebInfo, Coverage
 
 The following cache variables will be set/provided:
     <project-name>_force_coverage_flags_for_gcov - Set to ON to use flags to generate GCOV data
                                                    for all supported compiler.
 
 #]]
-function(handle_default_build_type)
-    # only check against CMAKE_BUILD_TYPE if generation is not for an IDE
-    if(NOT CMAKE_CONFIGURATION_TYPES)
-        define_coverage_build_type_variables()
+function(setup_build_type_variables)
+    define_coverage_build_type_variables()
+
+    get_property(is_multi_config GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+    if(is_multi_config)
+        if(NOT "Coverage" IN_LIST CMAKE_CONFIGURATION_TYPES)
+            list(APPEND CMAKE_CONFIGURATION_TYPES Coverage)
+        endif()
+    else()
+        # define valid build types which should be available for single-config generators
+        set(valid_build_types "Debug" "Release" "MinSizeRel" "RelWithDebInfo" "Coverage")
 
         # define default build type variable
         set(default_build_type "Debug")
 
-        # check if no build type is available
+        # set possible values for CMake GUI/TUI
+        set_property(
+            CACHE
+                CMAKE_BUILD_TYPE
+            PROPERTY
+                STRINGS "${valid_build_types}"
+        )
+
+        # check if CMake was called without defining a build type
         if(NOT CMAKE_BUILD_TYPE)
             message(STATUS "Setting build type to '${default_build_type}' as none was specified.")
 
             # set build type to default
             set(CMAKE_BUILD_TYPE "${default_build_type}"
                 CACHE
-                    STRING "Choose the type of build."
+                    STRING "Choose the type of build"
                 FORCE
             )
-
-            # set possible values for CMake GUI/TUI
-            set_property(
-                CACHE
-                    CMAKE_BUILD_TYPE
-                PROPERTY
-                    STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo" "Coverage"
-            )
-        endif()
-
-        # check if the build type is valid
-        set(valid_build_types "Debug" "Release" "MinSizeRel" "RelWithDebInfo" "Coverage")
-
-        if(NOT CMAKE_BUILD_TYPE IN_LIST valid_build_types)
-            string(REPLACE ";" " / " info_build_types "${valid_build_types}")
-            message(FATAL_ERROR "Invalid build type! [${info_build_types}]")
+        elseif(NOT CMAKE_BUILD_TYPE IN_LIST valid_build_types)
+            string(REPLACE ";" " | " info_build_types "${valid_build_types}")
+            message(FATAL_ERROR "Invalid build type: '${CMAKE_BUILD_TYPE}' [${info_build_types}]")
         endif()
 
         # print current build type
         message(VERBOSE "Build Type: ${CMAKE_BUILD_TYPE}")
-    else()
-        message(VERBOSE "Build type handling does not have an effect for IDE generators!")
     endif()
 endfunction()
 

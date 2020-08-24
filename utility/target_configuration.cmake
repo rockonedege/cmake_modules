@@ -170,15 +170,25 @@ function(configure_target)
     endif()
 
     if(tpre_ENABLE_UNUSED_SECTION_GARBAGE_COLLECTION)
-        target_compile_options(${tpre_TARGET}
-            PRIVATE
-                -ffunction-sections # place each function in its own section
-                -fdata-sections # place each data in its own section
-        )
-        target_link_options(${tpre_TARGET}
-            PRIVATE
-                -Wl,--gc-sections # enable garbage collection of unused sections
-        )
+        if(("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+            OR ("${CMAKE_C_COMPILER_ID}" STREQUAL "GNU")
+            OR ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+            OR ("${CMAKE_C_COMPILER_ID}" STREQUAL "Clang"))
+
+            target_compile_options(${tpre_TARGET}
+                PRIVATE
+                    -ffunction-sections # place each function in its own section
+                    -fdata-sections # place each data in its own section
+            )
+            target_link_options(${tpre_TARGET}
+                PRIVATE
+                    -Wl,--gc-sections # enable garbage collection of unused sections
+            )
+        else()
+            message(STATUS
+                "ENABLE_UNUSED_SECTION_GARBAGE_COLLECTION has no effect for the current compiler"
+            )
+        endif()
     endif()
 
     # BUILD_TYPE_AS_OUTPUT_DIR only has an effect if the generator is not an IDE

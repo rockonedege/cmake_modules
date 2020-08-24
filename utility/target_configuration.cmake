@@ -109,7 +109,7 @@ function(configure_target)
     target_compile_options(${tpre_TARGET}
         PRIVATE
             ${tpre_COMPILER_FLAGS}
-            $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:${tpre_SANITIZER_FLAGS}>
+            $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>,$<CONFIG:Coverage>>:${tpre_SANITIZER_FLAGS}>
     )
 
     # set include directories
@@ -138,7 +138,7 @@ function(configure_target)
     target_link_options(${tpre_TARGET}
         PRIVATE
             ${tpre_LINKER_FLAGS}
-            $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:${tpre_SANITIZER_FLAGS}>
+            $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>,$<CONFIG:Coverage>>:${tpre_SANITIZER_FLAGS}>
     )
 
     if(DEFINED tpre_C_STANDARD)

@@ -191,18 +191,25 @@ function(configure_target)
         endif()
     endif()
 
-    # BUILD_TYPE_AS_OUTPUT_DIR only has an effect if the generator is not an IDE
-    if(tpre_BUILD_TYPE_AS_OUTPUT_DIR AND (NOT CMAKE_CONFIGURATION_TYPES))
+    # BUILD_TYPE_AS_OUTPUT_DIR only has an effect if the generator is not multi-config
+    get_property(is_multi_config GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+
+    if(tpre_BUILD_TYPE_AS_OUTPUT_DIR AND (NOT is_multi_config))
         # use output dir depending on build type
-        string(TOLOWER "${CMAKE_BUILD_TYPE}" build_type_lower)
-        set_target_properties(${tpre_TARGET}
-            PROPERTIES
+        if(CMAKE_BUILD_TYPE)
+            string(TOLOWER "${CMAKE_BUILD_TYPE}" build_type_lower)
+
+            set_target_properties(${tpre_TARGET}
+                PROPERTIES
                 RUNTIME_OUTPUT_DIRECTORY
                     "${build_type_lower}/"
                 ARCHIVE_OUTPUT_DIRECTORY
                     "${build_type_lower}/"
                 LIBRARY_OUTPUT_DIRECTORY
                     "${build_type_lower}/"
-        )
+                )
+        else()
+            message(WARNING "The CMake variable 'CMAKE_BUILD_TYPE' is not defined!")
+        endif()
     endif()
 endfunction()

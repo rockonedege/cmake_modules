@@ -26,7 +26,7 @@ function(add_postbuild_strip target)
                 TARGET
                     ${target}
                 POST_BUILD
-                COMMENT "[----] Running post build step on target: ${target} (${CMAKE_BUILD_TYPE})"
+                COMMENT "[----] Strip symbols from target: ${target}"
                 COMMAND
                     ${CMAKE_STRIP}
                     --strip-all
@@ -41,7 +41,7 @@ function(add_postbuild_strip target)
                 TARGET
                     ${target}
                 POST_BUILD
-                COMMENT "[----] Running post build step on target: ${target} (${CMAKE_BUILD_TYPE})"
+                COMMENT "[----] Strip symbols from target: ${target}"
                 COMMAND
                     ${CMAKE_STRIP}
                     --strip-unneeded

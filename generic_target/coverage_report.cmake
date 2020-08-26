@@ -22,8 +22,8 @@ The coverage report is based on https://clang.llvm.org/docs/SourceBasedCodeCover
 for the generation the LLVM tools 'llvm-cov' and 'llvm-profdata' are required.
 
 The following custom targets will be available and should be used:
-    - coverage-report-<target>: generate a HTML report for the specific target
-    - coverage-report-all: generate HTML reports for all registered targets
+    - coverage_report: generate HTML reports for all registered targets
+    - coverage_report-<target>: generate a HTML report for the specific target
 
 NOTE: Some other custom targets will be created but they should not be called directly.
 
@@ -36,7 +36,7 @@ List of command line arguments which should be used when calling the target bina
 NOTE: Arguments with a whitespace needed to be either splitted as separate entries
       or need to be separated with a semicolon.
 
--ADDITIONAL_OBJECTS
+- ADDITIONAL_OBJECTS
 List of additional objects (object file, dynamic library, or archive) from which coverage
 is desired. The main usage would be when the project target is a library and coverage
 is wanted for a test binary which links against the library.
@@ -138,20 +138,29 @@ function(register_for_coverage_report)
         endif()
     endif()
 
+    # define variables which hold target names which are used below
+    set(coverage_report_all_target "coverage_report")
+    set(coverage_report_specific_target "${coverage_report_all_target}-${cov_TARGET}")
+    # internal targets which should not be called directly
+    set(coverage_setup_target "coverage_setup")
+    set(coverage_cleanup_target "coverage_cleanup")
+    set(coverage_run_target "coverage_run-${cov_TARGET}")
+    set(coverage_processing_target "coverage_processing-${cov_TARGET}")
+
     set(coverage_working_dir "${CMAKE_CURRENT_BINARY_DIR}/.tmp_coverage")
 
     # some general targets to not pollute the build directory
-    if(NOT TARGET coverage-setup)
-        add_custom_target(coverage-setup
+    if(NOT TARGET ${coverage_setup_target})
+        add_custom_target(${coverage_setup_target}
             COMMAND
                 ${CMAKE_COMMAND} -E make_directory ${coverage_working_dir}
             DEPENDS
-                coverage-cleanup
+                ${coverage_cleanup_target}
         )
     endif()
 
-    if(NOT TARGET coverage-cleanup)
-        add_custom_target(coverage-cleanup
+    if(NOT TARGET ${coverage_cleanup_target})
+        add_custom_target(${coverage_cleanup_target}
             COMMAND
                 ${CMAKE_COMMAND} -E rm -rf ${coverage_working_dir}
         )
@@ -162,23 +171,23 @@ function(register_for_coverage_report)
 
     # the 'exit 0' is needed to get a coverage report even
     # if the executable ended with an error code e.g. failed test
-    add_custom_target(coverage-run-${cov_TARGET}
+    add_custom_target(${coverage_run_target}
         COMMAND
             LLVM_PROFILE_FILE=${coverage_raw_file}
             $<TARGET_FILE:${cov_TARGET}> ${cov_ADDITIONAL_ARGUMENTS} || exit 0
         BYPRODUCTS
             ${coverage_raw_file}
         DEPENDS
-            coverage-setup
+            ${coverage_setup_target}
     )
 
-    add_custom_target(coverage-processing-${cov_TARGET}
+    add_custom_target(${coverage_processing_target}
         COMMAND
             ${llvm_profdata_executable} merge -sparse ${coverage_raw_file} -o ${coverage_data_file}
         BYPRODUCTS
             ${coverage_data_file}
         DEPENDS
-            coverage-run-${cov_TARGET}
+            ${coverage_run_target}
     )
 
     if(llvm_cxxfilt_executable)
@@ -197,7 +206,7 @@ function(register_for_coverage_report)
 
     list(LENGTH cov_EXCLUDE_REGEXES regex_list_length)
     if(regex_list_length EQUAL 0)
-        add_custom_target(coverage-report-${cov_TARGET}
+        add_custom_target(${coverage_report_specific_target}
             COMMAND
                 ${llvm_cov_executable} show $<TARGET_FILE:${cov_TARGET}>
                 -object=$<TARGET_FILE:${cov_TARGET}>
@@ -210,7 +219,7 @@ function(register_for_coverage_report)
             BYPRODUCTS
                 coverage-${cov_TARGET}
             DEPENDS
-                coverage-processing-${cov_TARGET}
+                ${coverage_processing_target}
         )
     else()
         foreach(regex IN LISTS cov_EXCLUDE_REGEXES)
@@ -219,7 +228,7 @@ function(register_for_coverage_report)
             )
         endforeach()
 
-        add_custom_target(coverage-report-${cov_TARGET}
+        add_custom_target(${coverage_report_specific_target}
             COMMAND
                 ${llvm_cov_executable} show $<TARGET_FILE:${cov_TARGET}>
                 -object=$<TARGET_FILE:${cov_TARGET}>
@@ -242,15 +251,14 @@ function(register_for_coverage_report)
             BYPRODUCTS
                 coverage-${cov_TARGET}
             DEPENDS
-                coverage-processing-${cov_TARGET}
+                ${coverage_processing_target}
         )
     endif()
 
     # 'all' target which can be used to generate coverage reports for all registered targets
-    set(coverage_report_all_target "coverage-report-all")
     if(NOT TARGET ${coverage_report_all_target})
         add_custom_target(${coverage_report_all_target})
     endif()
 
-    add_dependencies(${coverage_report_all_target} coverage-report-${cov_TARGET})
+    add_dependencies(${coverage_report_all_target} ${coverage_report_specific_target})
 endfunction()

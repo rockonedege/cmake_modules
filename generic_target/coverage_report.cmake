@@ -69,6 +69,12 @@ function(register_for_coverage_report)
         ${ARGN}
     )
 
+    # check if the calling project is not the root project
+    if(NOT PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)
+        # do not create targets when the caller is not the root project
+        return()
+    endif()
+
     # check for required arguments
     if(NOT DEFINED cov_TARGET)
         message(FATAL_ERROR "TARGET argument required!")

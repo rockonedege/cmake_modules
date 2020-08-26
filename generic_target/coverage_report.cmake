@@ -89,7 +89,7 @@ function(register_for_coverage_report)
 
     # check for some general requirements
     if(NOT CMAKE_BUILD_TYPE MATCHES "Coverage")
-        message(STATUS "Build type is not 'Coverage' which is needed to generate coverage reports.")
+        message(VERBOSE "Build type is not 'Coverage' which is needed to generate coverage reports.")
         message(STATUS "${no_targets_message}")
 
         return()
@@ -98,7 +98,7 @@ function(register_for_coverage_report)
     if((NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
         AND (NOT "${CMAKE_C_COMPILER_ID}" STREQUAL "Clang"))
 
-        message(STATUS "Coverage reports can only be generated when the Clang compiler is used.")
+        message(VERBOSE "Coverage reports can only be generated when the Clang compiler is used.")
         message(STATUS "${no_targets_message}")
 
         return()

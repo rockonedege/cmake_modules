@@ -1,7 +1,5 @@
-# Provides function to link X11 to target.
-#
-# The following function will be provided:
-#     link_x11_to_target - links X11 to target
+# The following functions will be provided:
+#   - link_x11_to_target
 #
 # NOTE: On including the file the library is searched. If the library is not found a 'FATAL_ERROR'
 #       message is thrown.

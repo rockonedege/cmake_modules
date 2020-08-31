@@ -1,8 +1,6 @@
-# Provides functions to check supported compiler flags.
-#
 # The following functions will be provided:
-#     check_supported_cxx_compiler_flags - check if given compiler flags are supported
-#     check_supported_c_compiler_flags - check if given compiler flags are supported
+#   - check_supported_cxx_compiler_flags
+#   - check_supported_c_compiler_flags
 
 include_guard(GLOBAL)
 

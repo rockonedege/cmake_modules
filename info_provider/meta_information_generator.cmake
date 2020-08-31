@@ -1,7 +1,5 @@
-# Provides function to generate a project meta information header file.
-#
-# The following function will be provided:
-#     generate_meta_information_header - generate a C++ header with meta informations
+# The following functions will be provided:
+#   - generate_meta_information_header
 
 include_guard(GLOBAL)
 

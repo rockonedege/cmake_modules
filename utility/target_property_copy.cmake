@@ -1,8 +1,6 @@
-# Provides functions to copy specific properties from one target to another.
-#
 # The following functions will be provided:
-#     copy_sources_without_main - copy source files without a 'main.cpp'
-#     copy_include_dirs - copy include directories
+#   - copy_sources_without_main
+#   - copy_include_dirs
 
 include_guard(GLOBAL)
 

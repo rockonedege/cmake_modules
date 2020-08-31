@@ -1,7 +1,5 @@
-# Provides function to link Qt5 to target.
-#
-# The following function will be provided:
-#     link_qt5_to_target - links Qt5 to target
+# The following functions will be provided:
+#   - link_qt5_to_target
 
 include_guard(GLOBAL)
 

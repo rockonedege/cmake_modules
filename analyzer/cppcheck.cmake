@@ -1,7 +1,5 @@
-# Provides function to register target to cppcheck.
-#
-# The following function will be provided:
-#     register_for_cppcheck - set cppcheck property of target
+# The following functions will be provided:
+#   - register_for_cppcheck
 
 include_guard(GLOBAL)
 

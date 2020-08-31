@@ -1,7 +1,5 @@
-# Provides function to setup build type related variables.
-#
-# The following function will be provided:
-#     setup_build_type_variables - sets build type related variables
+# The following functions will be provided:
+#   - setup_build_type_variables
 
 include_guard(GLOBAL)
 

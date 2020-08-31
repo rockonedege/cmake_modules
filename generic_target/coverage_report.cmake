@@ -1,7 +1,5 @@
-# Provides function to generate coverage reports.
-#
-# The following function will be provided:
-#     register_for_coverage_report - create custom targets to generate coverage reports
+# The following functions will be provided:
+#   - register_for_coverage_report
 
 include_guard(GLOBAL)
 

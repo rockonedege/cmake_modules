@@ -1,7 +1,5 @@
-# Provides function to enforce out-of-source builds.
-#
-# The following function will be provided:
-#     enforce_out_of_source_build - prevents in-source builds
+# The following functions will be provided:
+#   - enforce_out_of_source_build
 
 include_guard(GLOBAL)
 

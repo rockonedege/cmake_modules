@@ -1,7 +1,5 @@
-# Provides function to check if a faster linker is available.
-#
-# The following function will be provided:
-#     check_available_linker - Checks which linker is available on the system
+# The following functions will be provided:
+#   - check_available_linker
 
 include_guard(GLOBAL)
 

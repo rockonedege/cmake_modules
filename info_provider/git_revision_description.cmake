@@ -1,7 +1,5 @@
-# Provides function to get the current git revision.
-#
-# The following function will be provided:
-#     get_git_revision_description - provides the current git revision
+# The following functions will be provided:
+#   - get_git_revision_description
 
 include_guard(GLOBAL)
 

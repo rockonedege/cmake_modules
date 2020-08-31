@@ -1,7 +1,5 @@
-# Provides function to get sanitizer related flags.
-#
-# The following function will be provided:
-#     get_sanitizer_flags - provides flags for the requested sanitizer
+# The following functions will be provided:
+#   - get_sanitizer_flags
 
 include_guard(GLOBAL)
 

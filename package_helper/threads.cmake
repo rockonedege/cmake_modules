@@ -1,7 +1,5 @@
-# Provides function to link Threads to target.
-#
-# The following function will be provided:
-#     link_threads_to_target - links Threads to target
+# The following functions will be provided:
+#   - link_threads_to_target
 #
 # NOTE: On including the file the library is searched. If the library is not found a 'FATAL_ERROR'
 #       message is thrown.

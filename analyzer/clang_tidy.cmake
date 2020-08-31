@@ -1,7 +1,5 @@
-# Provides function to register target to clang-tidy.
-#
-# The following function will be provided:
-#     register_for_clang_tidy - set clang-tidy property of target
+# The following functions will be provided:
+#   - register_for_clang_tidy
 
 include_guard(GLOBAL)
 

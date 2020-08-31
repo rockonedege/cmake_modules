@@ -1,8 +1,6 @@
-# Provides functions to get the common compiler flags.
-#
 # The following functions will be provided:
-#     get_common_cxx_compiler_flags - provide common C++ compiler flags
-#     get_common_c_compiler_flags - provide common C compiler flags
+#   - get_common_cxx_compiler_flags
+#   - get_common_c_compiler_flags
 
 include_guard(GLOBAL)
 

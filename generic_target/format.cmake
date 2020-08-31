@@ -1,7 +1,5 @@
-# Provides function which define formatting related generic targets.
-#
-# The following function will be provided:
-#     define_format_targets - defines formatting related generic targets
+# The following functions will be provided:
+#   - define_format_targets
 
 include_guard(GLOBAL)
 

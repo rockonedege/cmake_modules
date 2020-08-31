@@ -1,7 +1,5 @@
-# Provides function to add post build strip step to target.
-#
-# The following function will be provided:
-#     add_postbuild_strip - add post build strip step to target
+# The following functions will be provided:
+#   - add_postbuild_strip
 
 include_guard(GLOBAL)
 

@@ -1,7 +1,5 @@
-# Provides function to link curl to target.
-#
-# The following function will be provided:
-#     link_curl_to_target - links curl to target
+# The following functions will be provided:
+#   - link_curl_to_target
 #
 # NOTE: On including the file the library is searched. If the library is not found a 'FATAL_ERROR'
 #       message is thrown.

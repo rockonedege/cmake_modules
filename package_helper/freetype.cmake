@@ -1,7 +1,5 @@
-# Provides function to link freetype to target.
-#
 # The following function will be provided:
-#     link_freetype_to_target - links freetype to target
+#   - link_freetype_to_target
 #
 # NOTE: On including the file the library is searched. If the library is not found a 'FATAL_ERROR'
 #       message is thrown.

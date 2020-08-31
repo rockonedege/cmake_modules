@@ -1,7 +1,5 @@
-# Provides function to configure a target.
-#
-# The following function will be provided:
-#     configure_target - configures the target with the given arguments
+# The following functions will be provided:
+#   - configure_target
 
 include_guard(GLOBAL)
 

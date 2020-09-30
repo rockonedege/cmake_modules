@@ -5,7 +5,7 @@ include_guard(GLOBAL)
 
 #[[
 
-Generate a C++ header in the build directory which contain project related meta informations.
+Generate a C++ header in the build directory which contains project related meta information.
 
 generate_meta_information_header(<project-name> <version-revision>)
 

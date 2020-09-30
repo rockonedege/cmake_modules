@@ -31,7 +31,7 @@ NOTE: Target needs to be of type 'Executable'.
 
 - ADDITIONAL_ARGUMENTS
 List of command line arguments which should be used when calling the target binary.
-NOTE: Arguments with a whitespace needed to be either splitted as separate entries
+NOTE: Arguments with a whitespace need to be either split as separate entries
       or need to be separated with a semicolon.
 
 - ADDITIONAL_OBJECTS
@@ -195,7 +195,7 @@ function(register_for_coverage_report)
     )
 
     if(llvm_cxxfilt_executable)
-        # NOTE: the semicolon will result in a 'whitespace' (splitted arguments)
+        # NOTE: the semicolon will result in a 'whitespace' (split arguments)
         set(demangler_argument "-Xdemangler;${llvm_cxxfilt_executable}")
     else()
         set(demangler_argument "")

@@ -21,7 +21,7 @@ cache variables and each function also documents its arguments.
 ## Usage
 
 Get a copy of the repository and place it inside or near your project. The
-prefered way of using `cmake_modules` is as Git submodule.
+preferred way of using `cmake_modules` is as Git submodule.
 
 ```sh
 $ git submodule add https://gitlab.com/s.blumentritt/cmake_modules.git <path>

@@ -27,7 +27,7 @@ function(register_for_clang_tidy target)
 
         if(NOT clang_tidy_executable)
             message(WARNING "clang-tidy was not found!")
-            message(WARNING "Calling 'register_for_clang_tidy' will not have an effect.")
+            message(WARNING "Calling '${CMAKE_CURRENT_FUNCTION}' will not have an effect.")
 
             # force set the cache variable to new value
             set(${PROJECT_NAME}_use_clang_tidy OFF

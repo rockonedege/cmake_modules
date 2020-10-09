@@ -31,7 +31,7 @@ function(get_git_revision_description output_var)
 
         if(NOT Git_FOUND)
             message(WARNING "git was not found!")
-            message(WARNING "Calling 'get_git_revision_description' will not have an effect.")
+            message(WARNING "Calling '${CMAKE_CURRENT_FUNCTION}' will not have an effect.")
 
             # force set the cache variable to new value
             set(${PROJECT_NAME}_get_git_status OFF

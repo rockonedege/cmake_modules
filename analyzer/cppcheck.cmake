@@ -27,7 +27,7 @@ function(register_for_cppcheck target)
 
         if(NOT cppcheck_executable)
             message(WARNING "cppcheck was not found!")
-            message(WARNING "Calling 'register_for_cppcheck' will not have an effect.")
+            message(WARNING "Calling '${CMAKE_CURRENT_FUNCTION}' will not have an effect.")
 
             # force set the cache variable to new value
             set(${PROJECT_NAME}_use_cppcheck OFF

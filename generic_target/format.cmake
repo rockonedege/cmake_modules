@@ -53,10 +53,10 @@ function(define_format_targets)
         endif()
     endif()
 
-    # get a list of all git repository files
+    # get a list of all cached (+ deleted) and untracked git repository files
     execute_process(
         COMMAND
-            ${GIT_EXECUTABLE} ls-files --cached --exclude-standard
+            ${GIT_EXECUTABLE} ls-files --cached --others --exclude-standard
         WORKING_DIRECTORY
             ${PROJECT_SOURCE_DIR}
         OUTPUT_VARIABLE
@@ -65,8 +65,27 @@ function(define_format_targets)
         OUTPUT_STRIP_TRAILING_WHITESPACE
     )
 
-    # convert output variable to a real CMake list
+    # get a list of all delete git repository files
+    execute_process(
+        COMMAND
+            ${GIT_EXECUTABLE} ls-files --deleted --exclude-standard
+        WORKING_DIRECTORY
+            ${PROJECT_SOURCE_DIR}
+        OUTPUT_VARIABLE
+            deleted_file_list
+        ERROR_QUIET
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+
+    # convert output variables to a real CMake list
     string(REPLACE "\n" ";" file_list "${file_list}")
+    string(REPLACE "\n" ";" deleted_file_list "${deleted_file_list}")
+
+    # remove all deleted file entries from the file list
+    foreach(item IN LISTS deleted_file_list)
+        list(REMOVE_ITEM file_list ${item})
+    endforeach()
+
     # only include C and C++ related files in the list
     list(FILTER file_list INCLUDE REGEX "^.*\\.(cpp|hpp|cxx|hxx|cc|hh|c|h)$")
     # update entries to contain the full absolute path

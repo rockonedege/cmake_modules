@@ -36,7 +36,24 @@ function(define_format_targets)
             message(WARNING "${no_targets_message}")
             return()
         else()
-            message(DEBUG "Found clang-format: ${clang_format_executable}")
+            # get the clang-format version string
+            execute_process(
+                COMMAND
+                    ${clang_format_executable} --version
+                OUTPUT_VARIABLE
+                    clang_format_version
+                ERROR_QUIET
+                OUTPUT_STRIP_TRAILING_WHITESPACE
+            )
+
+            # only get the version part of the process output
+            string(REGEX MATCH "[0-9\.]+" clang_format_version "${clang_format_version}")
+
+            # cache the version number
+            set(clang_format_version "${clang_format_version}" CACHE STRING "clang-format version")
+            mark_as_advanced(FORCE clang_format_version)
+
+            message(DEBUG "Found clang-format: ${clang_format_executable} ${clang_format_version}")
         endif()
     endif()
 
@@ -92,14 +109,17 @@ function(define_format_targets)
     list(TRANSFORM file_list PREPEND "${PROJECT_SOURCE_DIR}/")
 
     # only check if the files need to be formatted but do not change them
-    # TODO: validate that the clang-format version is >= 10 which has the --dry-run flag
-    add_custom_target(check_format
-        COMMAND
-            ${clang_format_executable} --dry-run --Werror --style=file ${file_list}
-        WORKING_DIRECTORY
-            ${PROJECT_SOURCE_DIR}
-        COMMAND_EXPAND_LISTS
-    )
+    if("${clang_format_version}" VERSION_GREATER_EQUAL "10")
+        add_custom_target(check_format
+            COMMAND
+                ${clang_format_executable} --dry-run --Werror --style=file ${file_list}
+            WORKING_DIRECTORY
+                ${PROJECT_SOURCE_DIR}
+            COMMAND_EXPAND_LISTS
+        )
+    else()
+        message(STATUS "clang-format version < 10, 'check_format' target will not be available!")
+    endif()
 
     # format the files in place
     add_custom_target(format

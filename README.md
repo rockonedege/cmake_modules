@@ -2,7 +2,12 @@
 
 This repository provides a wide range of CMake helper files.
 
-[[_TOC_]]
+## Table of Contents
+
+* [Description](#description)
+* [Requirements](#requirements)
+* [Usage](#usage)
+* [License](#license)
 
 ## Description
 

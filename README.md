@@ -29,7 +29,7 @@ Get a copy of the repository and place it inside or near your project. The
 preferred way of using `cmake_modules` is as Git submodule.
 
 ```sh
-$ git submodule add https://gitlab.com/s.blumentritt/cmake_modules.git <path>
+$ git submodule add https://github.com/sblumentritt/cmake_modules.git <path>
 ```
 
 To access the CMake files without the full path it is advised to append

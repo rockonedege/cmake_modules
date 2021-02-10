@@ -86,7 +86,7 @@ function(get_common_cxx_compiler_flags output_var)
             # for -Wno-unknown-warning unless other diagnostics are being produced.
             # -------------------------------------------------------------
             # As CMake's `check_cxx_compiler_flag` checks each flag in isolation 'GCC'
-            # things the flag could be used but on the real build all flags are used
+            # thinks the flag could be used but on the real build all flags are used
             # and 'GCC' would throw an error.
             list(APPEND compiler_flags
                 -Wno-gnu-zero-variadic-macro-arguments # must specify at least one argument

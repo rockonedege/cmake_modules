@@ -19,7 +19,7 @@ The content of the given variable will be completely overridden.
 
 The following cache variables will be set/provided:
     <project-name>_force_cxx_compiler_flag_check - Set to ON to invalidate cache and check again.
-                                                   Variable will be always set for OFF after call.
+                                                   Variable will be always set to OFF after call.
 
 #]]
 function(check_supported_cxx_compiler_flags compiler_flags supported_compiler_flags)
@@ -109,7 +109,7 @@ The content of the given variable will be completely overridden.
 
 The following cache variables will be set/provided:
     <project-name>_force_c_compiler_flag_check - Set to ON to invalidate cache and check again.
-                                                 Variable will be always set for OFF after call.
+                                                 Variable will be always set to OFF after call.
 
 #]]
 function(check_supported_c_compiler_flags compiler_flags supported_compiler_flags)
